@@ -82,7 +82,7 @@ function ListTeams() {
   return (
     <div className="listTeams">
       {editTeam ? (
-        <EditTeam idTeamToEdit={idTeamToEdit} />
+        <EditTeam idTeamToEdit={idTeamToEdit} handleEditTeam={handleEditTeam} />
       ) : (
         <DataGrid
           rows={rowsToShow}

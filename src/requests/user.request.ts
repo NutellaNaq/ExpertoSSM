@@ -241,3 +241,51 @@ export const addMemberToTeam = async (teamId: number, angajatId: number) => {
     return ApiResponse.error(error);
   }
 };
+
+export const deleteMemberFromTeam = async (
+  teamId: number,
+  angajatId: number
+) => {
+  try {
+    const result = await axiosInstance.post(`/team/deleteMember`, {
+      team_id: teamId,
+      angajat_id: angajatId,
+    });
+    return ApiResponse.success(result.data);
+  } catch (error) {
+    return ApiResponse.error(error);
+  }
+};
+
+export const addTeamLeader = async (teamId: number, angajatId: number) => {
+  try {
+    const result = await axiosInstance.post(`/team/addTeamLeader`, {
+      team_id: teamId,
+      angajat_id: angajatId,
+    });
+    return ApiResponse.success(result.data);
+  } catch (error) {
+    return ApiResponse.error(error);
+  }
+};
+
+export const deleteTeamLeader = async (teamId: number, angajatId: number) => {
+  try {
+    const result = await axiosInstance.post(`/team/deleteTeamLeader`, {
+      team_id: teamId,
+      angajat_id: angajatId,
+    });
+    return ApiResponse.success(result.data);
+  } catch (error) {
+    return ApiResponse.error(error);
+  }
+};
+
+export const getAllTeamLeadersApiRequest = async () => {
+  try {
+    const result = await axiosInstance.get("/angajati/getAllTeamLeaders");
+    return ApiResponse.success(result.data);
+  } catch (error) {
+    return ApiResponse.error(error);
+  }
+};

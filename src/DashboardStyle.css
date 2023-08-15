@@ -535,6 +535,7 @@ aside {
 .MuiDataGrid-root.MuiDataGrid-root--densityStandard.MuiDataGrid-withBorderColor.css-6h1dhi-MuiDataGrid-root {
   margin: 2rem;
   border-radius: 25px;
+  border-color: rgb(23, 74, 255);
 }
 
 .row-reverse {
@@ -744,13 +745,17 @@ select {
   display: flex;
   justify-content: center;
 }
-
+.leaderModal,
 .memberModal {
   height: fit-content;
   background: #e9e9e9;
   padding: 1rem 1.5rem;
   border-radius: 15px;
   border: 1px solid #c3c3c3;
+}
+
+.leaderModal {
+  margin: 0.3rem 0;
 }
 
 .MuiAutocomplete-hasPopupIcon.css-1wuilmg-MuiAutocomplete-root

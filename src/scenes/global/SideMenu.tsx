@@ -28,6 +28,7 @@ const SideMenu: React.FC<SideMenuProps> = ({
 
   //check if the userPermmisions array contains the permission "view-echipa-mea"
   const viewEchipaMea = userPermissions.includes("view-echipa-mea");
+  const viewCompaniaMea = userPermissions.includes("view-compania-mea");
   // const viewEchipaMea = true;
 
   const { collapseSidebar } = useProSidebar();
@@ -77,12 +78,14 @@ const SideMenu: React.FC<SideMenuProps> = ({
               >
                 Dashboard
               </MenuItem>
-              <MenuItem
-                onClick={() => handleSelectieMeniu("companiaMea")}
-                icon={<CompaniaMeaIcon />}
-              >
-                Compania mea
-              </MenuItem>
+              {viewCompaniaMea && (
+                <MenuItem
+                  onClick={() => handleSelectieMeniu("companiaMea")}
+                  icon={<CompaniaMeaIcon />}
+                >
+                  Compania mea
+                </MenuItem>
+              )}
 
               {viewEchipaMea && (
                 <MenuItem
