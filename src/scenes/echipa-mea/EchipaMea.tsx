@@ -9,6 +9,7 @@ import TeamTable, {
 } from "../profil-angajati/adminPage/adminAngajati";
 import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
+import TitlePage from "../../components/Title-Page";
 
 type AngajatTable = Angajat & {
   id: number;
@@ -268,6 +269,7 @@ function EchipaMea() {
   return (
     <>
       <div id="echipaMea">
+        <TitlePage mainTitle={"ECHIPA MEA"} />
         {!seeMore && (
           <div style={{ margin: "2 rem" }}>
             <FormControlLabel

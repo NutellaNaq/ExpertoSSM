@@ -1,17 +1,57 @@
-import { FormEvent, useState } from "react";
-import "../DashboardStyle.css";
-import { loginAPIRequest } from "../requests/user.request";
-import { useNavigate } from "react-router-dom";
+import { FormEvent, useEffect, useState } from "react";
+import "../../DashboardStyle.css";
+import {
+  loginAPIRequest,
+  loginWithTokenAPIRequest,
+} from "../../requests/user.request";
+import { useNavigate, useParams } from "react-router-dom";
+import { axiosInstance } from "../../utils/api.utils";
 
 function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  const { tokenEmail } = useParams();
+
+  const handleLoginWithToken = async () => {
+    if (!tokenEmail) {
+      return;
+    }
+    const loginTokenData = await loginWithTokenAPIRequest(tokenEmail);
+
+    if (loginTokenData.error) {
+      alert(loginTokenData.message);
+      return;
+    }
+
+    localStorage.setItem("token", loginTokenData.token);
+
+    axiosInstance.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${loginTokenData.token}`;
+
+    navigate("/");
+
+    console.log("Login with token success");
+  };
+
+  useEffect(() => {
+    handleLoginWithToken();
+
+    console.log("Login with token success");
+  }, [tokenEmail]);
+
+  //create a function that will change the route to "/Login/ForgotPassword"
+  //when the button "Forgot password" is clicked
+  const handleForgotPassword = () => {
+    navigate("/Login/ForgotPassword");
+  };
+
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const loginData = {
-      email: username,
+      emailOrTelephone: username,
       password: password,
     };
     const responseLogin = await loginAPIRequest(loginData);
@@ -55,7 +95,11 @@ function LoginPage() {
             <button type="submit" className="button-style-1">
               Login
             </button>
-            <button type="button" className="button-style-2">
+            <button
+              type="button"
+              className="button-style-2"
+              onClick={handleForgotPassword}
+            >
               Forgot password
             </button>
           </div>

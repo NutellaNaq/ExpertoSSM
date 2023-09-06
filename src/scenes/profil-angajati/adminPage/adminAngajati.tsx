@@ -162,7 +162,10 @@ function Row(props: {
                     </TableRow>
                   ))}
                   <Typography variant="h6" gutterBottom component="div">
-                    <button onClick={() => handleTeamData(row.id, row.name)}>
+                    <button
+                      className="button-style-1"
+                      onClick={() => handleTeamData(row.id, row.name)}
+                    >
                       See More
                     </button>
                   </Typography>

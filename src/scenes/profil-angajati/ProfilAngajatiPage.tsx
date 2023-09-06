@@ -1,3 +1,4 @@
+import TitlePage from "../../components/Title-Page";
 import ProfilAngajati from "./ProfilAngajati";
 import ProfilPersonal from "./ProfilPersonal";
 
@@ -10,6 +11,7 @@ function ProfilAngajatPage({ userPermissions }: props) {
 
   return (
     <>
+      <TitlePage mainTitle={"PROFIL ANGAJATI"} />
       {isNotAngajat ? (
         <ProfilAngajati userPermissions={userPermissions} />
       ) : (

@@ -16,8 +16,6 @@ const SideMenu: React.FC<SideMenuProps> = ({
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  console.log(userPermissions.includes("view-echipa-mea"));
-
   function changeInterfaceMarginLeft() {
     const dashboard = document.getElementById("dashboard-page");
     if (dashboard) {

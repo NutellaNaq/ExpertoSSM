@@ -12,6 +12,10 @@ type RowToShow = {
   leaders: string;
 };
 
+type props = {
+  handleSetTeamList: () => void;
+};
+
 const handleListOfTeamsRequest = async () => {
   const response = await getListOfTeamsApiRequest();
 
@@ -35,7 +39,7 @@ const handleListOfTeamsRequest = async () => {
   return transformedData;
 };
 
-function ListTeams() {
+const ListTeams = ({ handleSetTeamList }: props) => {
   const [rowsToShow, setRowsToShow] = useState<RowToShow[]>([]);
   const [editTeam, setEditTeam] = useState<boolean>(false);
   const [idTeamToEdit, setIdTeamToEdit] = useState<number>(0);
@@ -82,21 +86,34 @@ function ListTeams() {
   return (
     <div className="listTeams">
       {editTeam ? (
-        <EditTeam idTeamToEdit={idTeamToEdit} handleEditTeam={handleEditTeam} />
-      ) : (
-        <DataGrid
-          rows={rowsToShow}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-          }}
-          slots={{ toolbar: GridToolbar }}
+        <EditTeam
+          idTeamToEdit={idTeamToEdit}
+          handleEditTeam={handleEditTeam}
+          handleSetTeamList={handleSetTeamList}
         />
+      ) : (
+        <div>
+          <button
+            className="button-style-1"
+            onClick={handleSetTeamList}
+            style={{ margin: "0 2rem" }}
+          >
+            Back to Chart
+          </button>
+          <DataGrid
+            rows={rowsToShow}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 },
+              },
+            }}
+            slots={{ toolbar: GridToolbar }}
+          />
+        </div>
       )}
     </div>
   );
-}
+};
 
 export default ListTeams;

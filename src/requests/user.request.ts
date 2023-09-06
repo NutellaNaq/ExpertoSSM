@@ -1,36 +1,48 @@
 import { ApiResponse, axiosInstance } from "../utils/api.utils";
 
 type LoginRequestType = {
-  email: string;
+  emailOrTelephone: string;
   password: string;
 };
 
 type AngajatData = {
-  nume: string;
-  prenume: string;
-  legitimatie: string;
-  grupaSanguina: string;
-  domiciliu: string;
-  dataNasterii: string;
-  loculNasterii: string;
-  calificarea: string;
-  functia: string;
+  last_name: string;
+  first_name: string;
+  badge_number: string;
+  blood_type: string;
+  home_adress: string;
+  date_of_birth: string;
+  place_of_birth: string;
+  qualification: string;
+  function: string;
   email: string;
-  telefon: string;
-  departamentul: string;
-  numarMatricolIntern: string;
-  dataAngajarii: string;
-  conduceMasinaCompaniei: boolean;
+  telephone: string;
+  department: string;
+  internal_matriculation_number: string;
+  date_of_employment: string;
+  drives_the_company_car: boolean;
 };
 
 type UserAngajat = {
   email?: string;
-  telefon?: string;
+  telephone?: string;
   role: string;
 };
 
-type FisaSSMAngajat = {
-  angajati: string[];
+// type FisaSSMAngajat = {
+//   angajati: string[];
+// };
+
+type AngajatiToAdd = {
+  id: number;
+  name: string;
+};
+
+type EchipaToAdd = {
+  name: string;
+  parent_team: number;
+  angajati: AngajatiToAdd[];
+  leaders: AngajatiToAdd[];
 };
 
 export const logoutAPIRequest = async () => {
@@ -77,6 +89,17 @@ export const loginAPIRequest = async (LoginData: LoginRequestType) => {
     localStorage.setItem("token", token);
     axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     console.log(localStorage.getItem("token"));
+    return ApiResponse.success(result.data);
+  } catch (error) {
+    return ApiResponse.error(error);
+  }
+};
+
+export const loginWithTokenAPIRequest = async (tokenEmail: string) => {
+  try {
+    const result = await axiosInstance.post("/user/loginWithToken", {
+      token: tokenEmail,
+    });
     return ApiResponse.success(result.data);
   } catch (error) {
     return ApiResponse.error(error);
@@ -175,6 +198,15 @@ export const registerUserAngajatAPIRequest = async (
 export const getAllAngajatiStatusApiRequest = async () => {
   try {
     const result = await axiosInstance.get("/angajati/getAllAngajatiStatus");
+    return ApiResponse.success(result.data);
+  } catch (error) {
+    return ApiResponse.error(error);
+  }
+};
+
+export const getAllTeamsApiRequest = async () => {
+  try {
+    const result = await axiosInstance.get("/team/getAllTeams");
     return ApiResponse.success(result.data);
   } catch (error) {
     return ApiResponse.error(error);
@@ -284,6 +316,51 @@ export const deleteTeamLeader = async (teamId: number, angajatId: number) => {
 export const getAllTeamLeadersApiRequest = async () => {
   try {
     const result = await axiosInstance.get("/angajati/getAllTeamLeaders");
+    return ApiResponse.success(result.data);
+  } catch (error) {
+    return ApiResponse.error(error);
+  }
+};
+
+export const getAllMembersAndTeamLeadersApiRequest = async () => {
+  try {
+    const result = await axiosInstance.get("/team/getAllMembersAndTeamLeaders");
+    return ApiResponse.success(result.data);
+  } catch (error) {
+    return ApiResponse.error(error);
+  }
+};
+
+export const createTeamApiRequest = async (values: EchipaToAdd) => {
+  try {
+    const result = await axiosInstance.post("/team/store", {
+      name: values.name,
+      parent_team: values.parent_team,
+      angajati: values.angajati,
+      leaders: values.leaders,
+    });
+    return ApiResponse.success(result.data);
+  } catch (error) {
+    return ApiResponse.error(error);
+  }
+};
+
+export const recoverPasswordApiRequest = async (emailOrTelephone: string) => {
+  try {
+    const result = await axiosInstance.post("/user/sendVerificationCode", {
+      emailOrTelephone: emailOrTelephone,
+    });
+    return ApiResponse.success(result.data);
+  } catch (error) {
+    return ApiResponse.error(error);
+  }
+};
+
+export const changePasswordGeneratedApiRequest = async (code: string) => {
+  try {
+    const result = await axiosInstance.post("/user/changePasswordGenerated", {
+      code: code,
+    });
     return ApiResponse.success(result.data);
   } catch (error) {
     return ApiResponse.error(error);

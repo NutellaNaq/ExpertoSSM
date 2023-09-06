@@ -11,10 +11,12 @@ import {
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { Autocomplete, IconButton, TextField } from "@mui/material";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 type props = {
   idTeamToEdit: number;
   handleEditTeam: (value: boolean) => void;
+  handleSetTeamList: () => void;
 };
 
 type MembersAndLeaders = {
@@ -38,7 +40,7 @@ type TeamDetails = {
   leaders: MembersAndLeaders[];
 };
 
-function EditTeam({ idTeamToEdit, handleEditTeam }: props) {
+function EditTeam({ idTeamToEdit, handleEditTeam, handleSetTeamList }: props) {
   const [teamDetails, setTeamDetails] = useState<TeamDetails>(
     {} as TeamDetails
   );
@@ -363,7 +365,7 @@ function EditTeam({ idTeamToEdit, handleEditTeam }: props) {
                   />
                 </div>
                 <div
-                  className="flex row-reverse"
+                  className="flex row-reverse align-items-center"
                   style={{ margin: "1rem 0 0 0 " }}
                 >
                   <button
@@ -372,12 +374,12 @@ function EditTeam({ idTeamToEdit, handleEditTeam }: props) {
                   >
                     Adauga membru
                   </button>
-                  <button
-                    className="button-style-2"
+                  <h4
+                    style={{ cursor: "pointer", margin: "0 1rem" }}
                     onClick={() => setIsMemberModalOpen(false)}
                   >
                     Anuleaza
-                  </button>
+                  </h4>
                 </div>
               </div>
             </div>
@@ -426,7 +428,7 @@ function EditTeam({ idTeamToEdit, handleEditTeam }: props) {
                   />
                 </div>
                 <div
-                  className="flex row-reverse"
+                  className="flex row-reverse align-items-center"
                   style={{ margin: "1rem 0 0 0 " }}
                 >
                   <button
@@ -435,12 +437,12 @@ function EditTeam({ idTeamToEdit, handleEditTeam }: props) {
                   >
                     Adauga team leader
                   </button>
-                  <button
-                    className="button-style-2"
+                  <h4
+                    style={{ cursor: "pointer", margin: "0 1rem" }}
                     onClick={() => setIsLeaderModalOpen(false)}
                   >
                     Anuleaza
-                  </button>
+                  </h4>
                 </div>
               </div>
             </div>
@@ -458,8 +460,16 @@ function EditTeam({ idTeamToEdit, handleEditTeam }: props) {
       >
         <h1>{teamDetails.team_name}</h1>
       </div>
-      <div>
-        <button onClick={() => handleEditTeam(false)}>Click</button>
+
+      <div className="flex align-items-center" style={{ marginLeft: "2rem" }}>
+        <ArrowBackIcon
+          style={{ cursor: "pointer", marginRight: "1rem" }}
+          onClick={() => handleEditTeam(false)}
+        />
+
+        <button className="button-style-1" onClick={handleSetTeamList}>
+          Back to Chart
+        </button>
       </div>
       <div className="teamEditMembers">
         <DataGrid

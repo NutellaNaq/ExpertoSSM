@@ -7,6 +7,9 @@ import {
   GridRowModel,
 } from "@mui/x-data-grid";
 import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
   IconButton,
   InputBase,
   Paper,
@@ -27,21 +30,21 @@ import { useEffect, useState } from "react";
 import ModalDelete from "./modals/ModalDelete";
 
 type Angajat = {
-  nume: string;
-  prenume: string;
-  legitimatie: string;
-  grupaSanguina: string;
-  domiciliu: string;
-  dataNasterii: string;
-  loculNasterii: string;
-  calificarea: string;
-  functia: string;
+  last_name: string;
+  first_name: string;
+  badge_number: string;
+  blood_type: string;
+  home_adress: string;
+  date_of_birth: string;
+  place_of_birth: string;
+  qualification: string;
+  function: string;
   email: string;
-  telefon: string;
-  departamentul: string;
-  numarMatricolIntern: string;
-  dataAngajarii: string;
-  conduceMasinaCompaniei: boolean;
+  telephone: string;
+  department: string;
+  internal_matriculation_number: string;
+  date_of_employment: string;
+  drives_the_company_car: boolean;
 };
 
 type AngajatTable = Angajat & {
@@ -49,21 +52,21 @@ type AngajatTable = Angajat & {
 };
 
 const INITIAL_VALUE = {
-  nume: "",
-  prenume: "",
-  legitimatie: "",
-  grupaSanguina: "",
-  domiciliu: "",
-  dataNasterii: "",
-  loculNasterii: "",
-  calificarea: "",
-  functia: "",
+  last_name: "",
+  first_name: "",
+  badge_number: "",
+  blood_type: "",
+  home_adress: "",
+  date_of_birth: "",
+  place_of_birth: "",
+  qualification: "",
+  function: "",
   email: "",
-  telefon: "",
-  departamentul: "",
-  numarMatricolIntern: "",
-  dataAngajarii: "",
-  conduceMasinaCompaniei: false,
+  telephone: "",
+  department: "",
+  internal_matriculation_number: "",
+  date_of_employment: "",
+  drives_the_company_car: false,
 };
 
 type props = {
@@ -72,7 +75,12 @@ type props = {
 
 type UserAngajat = {
   email?: string;
-  telefon?: string;
+  last_name?: string;
+  first_name?: string;
+  date_of_birth?: string;
+  place_of_birth?: string;
+  blood_type?: string;
+  telephone?: string;
   role: string;
 };
 
@@ -83,7 +91,13 @@ function ProfilAngajati({ userPermissions }: props) {
   const [angajatData, setAngajatData] = useState(INITIAL_VALUE);
   const [userAngajatInfo, setUserAngajatInfo] = useState({
     email: "",
-    telefon: "",
+    telephone: "",
+    last_name: "",
+    first_name: "",
+    date_of_birth: "",
+    place_of_birth: "",
+    blood_type: "",
+    home_address: "",
     role: "",
   });
   const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
@@ -93,6 +107,64 @@ function ProfilAngajati({ userPermissions }: props) {
   const [filteredRowsTable, setFilteredRowsTable] = useState<AngajatTable[]>(
     []
   );
+
+  const [passwordWarning, setPasswordWarning] = useState(false);
+  const [passwordWarningMessage, setPasswordWarningMessage] = useState("");
+
+  const [emailWarning, setEmailWarning] = useState(false);
+  const [emailWarningMessage, setEmailWarningMessage] = useState("");
+
+  const [openModalAdaugaAngajat, setOpenModalAdaugaAngajat] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpenModalAdaugaAngajat(true);
+  };
+
+  const handleClickOpenNewAngajat = () => {
+    setAdaugaAngajat(true);
+    handleClickOpen();
+    setAngajatData(INITIAL_VALUE);
+  };
+
+  const handleClose = () => {
+    setOpenModalAdaugaAngajat(false);
+  };
+
+  const checkTelefon = (telephone: string) => {
+    //check if the phone number is a valid romanian phone number
+    const regex = /^(07)[0-9]{8}$/;
+    return regex.test(telephone);
+  };
+
+  const checkEmail = (email: string) => {
+    //check if the email is a valid email
+    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return regex.test(email);
+  };
+
+  useEffect(() => {
+    if (passwordWarning) {
+      if (checkTelefon(angajatData.telephone)) {
+        setPasswordWarning(false);
+        setPasswordWarningMessage("");
+      } else {
+        setPasswordWarning(true);
+        setPasswordWarningMessage("Numarul de telefon nu este valid");
+      }
+    }
+  }, [angajatData.telephone]);
+
+  useEffect(() => {
+    if (passwordWarning) {
+      if (checkEmail(userAngajatInfo.email)) {
+        setEmailWarning(false);
+        setEmailWarningMessage("");
+      } else {
+        setEmailWarning(true);
+        setEmailWarningMessage("Email-ul nu este valid");
+      }
+    }
+  }, [userAngajatInfo.email]);
 
   const handleSearchInputChange = (value: string) => {
     setSearchTerm(value);
@@ -208,6 +280,7 @@ function ProfilAngajati({ userPermissions }: props) {
             <EditIcon
               onClick={(event) => {
                 event.stopPropagation();
+                handleClickOpen();
                 handleEdit(params);
               }}
             />
@@ -216,15 +289,15 @@ function ProfilAngajati({ userPermissions }: props) {
       ),
     },
     { field: "id", headerName: "ID", width: 70 },
-    { field: "nume", headerName: "Nume", width: 160 },
-    { field: "prenume", headerName: "Prenume", width: 160 },
-    { field: "legitimatie", headerName: "Legitimatie", width: 160 },
-    { field: "grupaSanguina", headerName: "Grupa sanguina", width: 160 },
-    { field: "calificarea", headerName: "Calificarea", width: 160 },
-    { field: "functia", headerName: "Functia", width: 160 },
-    { field: "departamentul", headerName: "Departamentul", width: 160 },
+    { field: "last_name", headerName: "Nume", width: 160 },
+    { field: "first_name", headerName: "Prenume", width: 160 },
+    { field: "badge_number", headerName: "Legitimatie", width: 160 },
+    { field: "blood_type", headerName: "Grupa sanguina", width: 160 },
+    { field: "qualification", headerName: "Calificarea", width: 160 },
+    { field: "function", headerName: "Functia", width: 160 },
+    { field: "department", headerName: "Departamentul", width: 160 },
     {
-      field: "conduceMasinaCompaniei",
+      field: "drives_the_company_car",
       headerName: "Conduce masina companiei",
       width: 160,
     },
@@ -232,15 +305,15 @@ function ProfilAngajati({ userPermissions }: props) {
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70 },
-    { field: "nume", headerName: "Nume", width: 160 },
-    { field: "prenume", headerName: "Prenume", width: 160 },
-    { field: "legitimatie", headerName: "Legitimatie", width: 160 },
-    { field: "grupaSanguina", headerName: "Grupa sanguina", width: 160 },
-    { field: "calificarea", headerName: "Calificarea", width: 160 },
-    { field: "functia", headerName: "Functia", width: 160 },
-    { field: "departamentul", headerName: "Departamentul", width: 160 },
+    { field: "last_name", headerName: "Nume", width: 160 },
+    { field: "first_name", headerName: "Prenume", width: 160 },
+    { field: "badge_number", headerName: "Legitimatie", width: 160 },
+    { field: "blood_type", headerName: "Grupa sanguina", width: 160 },
+    { field: "qualification", headerName: "Calificarea", width: 160 },
+    { field: "function", headerName: "Functia", width: 160 },
+    { field: "department", headerName: "Departamentul", width: 160 },
     {
-      field: "conduceMasinaCompaniei",
+      field: "drives_the_company_car",
       headerName: "Conduce masina companiei",
       width: 160,
     },
@@ -254,47 +327,8 @@ function ProfilAngajati({ userPermissions }: props) {
     }
 
     const angajatiArray: AngajatTable[] = Object.values(
-      getAngajatiInfo.angajati
+      getAngajatiInfo.Employees
     );
-
-    const newRows = angajatiArray.map((item: AngajatTable) => {
-      const {
-        id,
-        nume,
-        prenume,
-        legitimatie,
-        grupaSanguina,
-        domiciliu,
-        dataNasterii,
-        loculNasterii,
-        calificarea,
-        functia,
-        email,
-        telefon,
-        departamentul,
-        numarMatricolIntern,
-        dataAngajarii,
-        conduceMasinaCompaniei,
-      } = item;
-      return {
-        id,
-        nume,
-        prenume,
-        legitimatie,
-        grupaSanguina,
-        domiciliu,
-        dataNasterii,
-        loculNasterii,
-        calificarea,
-        functia,
-        email,
-        telefon,
-        departamentul,
-        numarMatricolIntern,
-        dataAngajarii,
-        conduceMasinaCompaniei,
-      };
-    });
 
     setRow(angajatiArray);
     setFilteredRowsTable(angajatiArray);
@@ -316,7 +350,7 @@ function ProfilAngajati({ userPermissions }: props) {
     if (searchTerm !== "") {
       const filterRows = (rows: AngajatTable[]) => {
         return rows.filter((row) => {
-          return row.nume.toLowerCase().includes(searchTerm.toLowerCase());
+          return row.last_name.toLowerCase().includes(searchTerm.toLowerCase());
         });
       };
 
@@ -361,25 +395,27 @@ function ProfilAngajati({ userPermissions }: props) {
     e.preventDefault();
 
     if (adaugaAngajat) {
-      if (angajatData.email == "" && angajatData.telefon !== "") {
-        const telefonValue = angajatData.telefon;
-        handleUserAngajatChange({ telefon: telefonValue });
-      } else if (angajatData.telefon == "" && angajatData.email !== "") {
+      if (angajatData.email == "" && angajatData.telephone !== "") {
+        const telefonValue = angajatData.telephone;
+        handleUserAngajatChange({ telephone: telefonValue });
+      } else if (angajatData.telephone == "" && angajatData.email !== "") {
         const emailValue = angajatData.email;
         handleUserAngajatChange({ email: emailValue });
       } else {
         const emailValue = angajatData.email;
-        const telefonValue = angajatData.telefon;
+        const telefonValue = angajatData.telephone;
         setUserAngajatInfo({
           ...userAngajatInfo,
           email: emailValue,
-          telefon: telefonValue,
+          telephone: telefonValue,
         });
       }
 
       const createAngajatUser = await registerUserAngajatAPIRequest(
         userAngajatInfo
       );
+
+      console.log(createAngajatUser);
 
       // Check if the response contains user_id
       if (!createAngajatUser) {
@@ -390,7 +426,7 @@ function ProfilAngajati({ userPermissions }: props) {
       const createAngajatDataWithUserId = async () => {
         const angajatDataWithUserId = {
           ...angajatData,
-          user_id: createAngajatUser.user.id, // Use the user_id from the response
+          user_id: createAngajatUser.id, // Use the user_id from the response
         };
         const responseAngajat = await createAngajatAPIRequest(
           angajatDataWithUserId
@@ -407,21 +443,22 @@ function ProfilAngajati({ userPermissions }: props) {
       }
       const newRow = {
         id: responseAngajat.id,
-        nume: responseAngajat.nume,
-        prenume: responseAngajat.prenume,
-        legitimatie: responseAngajat.legitimatie,
-        grupaSanguina: responseAngajat.grupaSanguina,
-        domiciliu: responseAngajat.domiciliu,
-        dataNasterii: responseAngajat.dataNasterii,
-        loculNasterii: responseAngajat.loculNasterii,
-        calificarea: responseAngajat.calificarea,
-        functia: responseAngajat.functia,
+        last_name: responseAngajat.last_name,
+        first_name: responseAngajat.first_name,
+        badge_number: responseAngajat.badge_number,
+        blood_type: responseAngajat.blood_type,
+        home_adress: responseAngajat.home_adress,
+        date_of_birth: responseAngajat.date_of_birth,
+        place_of_birth: responseAngajat.place_of_birth,
+        qualification: responseAngajat.qualification,
+        function: responseAngajat.function,
         email: responseAngajat.email,
-        telefon: responseAngajat.telefon,
-        departamentul: responseAngajat.departamentul,
-        numarMatricolIntern: responseAngajat.numarMatricolIntern,
-        dataAngajarii: responseAngajat.dataAngajarii,
-        conduceMasinaCompaniei: responseAngajat.conduceMasinaCompaniei,
+        telephone: responseAngajat.telephone,
+        department: responseAngajat.department,
+        internal_matriculation_number:
+          responseAngajat.internal_matriculation_number,
+        date_of_employment: responseAngajat.date_of_employment,
+        drives_the_company_car: responseAngajat.drives_the_company_car,
       };
 
       setRow([...row, newRow]);
@@ -439,21 +476,22 @@ function ProfilAngajati({ userPermissions }: props) {
         if (item.id === responseEditAngajat.id) {
           return {
             id: responseEditAngajat.id,
-            nume: responseEditAngajat.nume,
-            prenume: responseEditAngajat.prenume,
-            legitimatie: responseEditAngajat.legitimatie,
-            grupaSanguina: responseEditAngajat.grupaSanguina,
-            domiciliu: responseEditAngajat.domiciliu,
-            dataNasterii: responseEditAngajat.dataNasterii,
-            loculNasterii: responseEditAngajat.loculNasterii,
-            calificarea: responseEditAngajat.calificarea,
-            functia: responseEditAngajat.functia,
+            last_name: responseEditAngajat.last_name,
+            first_name: responseEditAngajat.first_name,
+            badge_number: responseEditAngajat.badge_number,
+            blood_type: responseEditAngajat.blood_type,
+            home_adress: responseEditAngajat.home_adress,
+            date_of_birth: responseEditAngajat.date_of_birth,
+            place_of_birth: responseEditAngajat.place_of_birth,
+            qualification: responseEditAngajat.qualification,
+            function: responseEditAngajat.function,
             email: responseEditAngajat.email,
-            telefon: responseEditAngajat.telefon,
-            departamentul: responseEditAngajat.departamentul,
-            numarMatricolIntern: responseEditAngajat.numarMatricolIntern,
-            dataAngajarii: responseEditAngajat.dataAngajarii,
-            conduceMasinaCompaniei: responseEditAngajat.conduceMasinaCompaniei,
+            telephone: responseEditAngajat.telephone,
+            department: responseEditAngajat.department,
+            internal_matriculation_number:
+              responseEditAngajat.internal_matriculation_number,
+            date_of_employment: responseEditAngajat.date_of_employment,
+            drives_the_company_car: responseEditAngajat.drives_the_company_car,
           };
         }
         return item;
@@ -461,338 +499,349 @@ function ProfilAngajati({ userPermissions }: props) {
 
       setRow(newRows);
 
-      setEditAngajat(false);
+      setOpenModalAdaugaAngajat(false);
+      handleClose();
     }
   };
 
   return (
     <div id="profilAngajati">
-      {adaugaAngajat || editAngajat ? (
-        <form
-          onSubmit={handleOnSubmit}
-          className="flex column align-items-center w-auto"
-        >
-          <div id="adauga-angajat-container" className="flex">
-            <div className="flex column">
-              <div className="flex column">
-                <h3 className="w-auto">Informatii angajat</h3>
-                <input
-                  required
-                  type="text"
-                  placeholder="Nume"
-                  value={angajatData.nume}
-                  onChange={(e) => {
-                    handleInputChange({
-                      nume: e.target.value,
-                    });
-                  }}
-                />
-                <input
-                  required
-                  type="text"
-                  placeholder="Prenume"
-                  value={angajatData.prenume}
-                  onChange={(e) => {
-                    handleInputChange({
-                      prenume: e.target.value,
-                    });
-                  }}
-                />
-                <input
-                  required
-                  type="text"
-                  placeholder="Legitimatie"
-                  value={angajatData.legitimatie}
-                  onChange={(e) => {
-                    handleInputChange({
-                      legitimatie: e.target.value,
-                    });
-                  }}
-                />
-                <input
-                  required
-                  type="text"
-                  placeholder="Grupa sanguina"
-                  value={angajatData.grupaSanguina}
-                  onChange={(e) => {
-                    handleInputChange({
-                      grupaSanguina: e.target.value,
-                    });
-                  }}
-                />
-                <input
-                  required
-                  type="text"
-                  placeholder="Domiciliul"
-                  value={angajatData.domiciliu}
-                  onChange={(e) => {
-                    handleInputChange({
-                      domiciliu: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-              <div className="flex column">
-                <label className="w-auto" htmlFor="date">
-                  Data nasterii
-                </label>
-                <input
-                  required
-                  type="date"
-                  placeholder="Data nasterii"
-                  value={angajatData.dataNasterii}
-                  onChange={(e) => {
-                    handleInputChange({
-                      dataNasterii: e.target.value,
-                    });
-                  }}
-                />
-                <input
-                  required
-                  type="text"
-                  placeholder="Locul nasterii"
-                  value={angajatData.loculNasterii}
-                  onChange={(e) => {
-                    handleInputChange({
-                      loculNasterii: e.target.value,
-                    });
-                  }}
-                />
-                <input
-                  type="text"
-                  placeholder="Calificarea"
-                  value={angajatData.calificarea}
-                  onChange={(e) => {
-                    handleInputChange({
-                      calificarea: e.target.value,
-                    });
-                  }}
-                />
-                <input
-                  type="text"
-                  placeholder="Functia"
-                  value={angajatData.functia}
-                  onChange={(e) => {
-                    handleInputChange({
-                      functia: e.target.value,
-                    });
-                  }}
-                />
-                <input
-                  required
-                  type="mail"
-                  placeholder="Email"
-                  value={angajatData.email}
-                  onChange={(e) => {
-                    handleDoubleInputChange({
-                      email: e.target.value,
-                    });
-                  }}
-                />
-                <input
-                  required
-                  type="tel"
-                  placeholder="Telefon"
-                  value={angajatData.telefon}
-                  onChange={(e) => {
-                    handleDoubleInputChange({
-                      telefon: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-            </div>
-            <div className="flex column">
-              <div className="flex column">
-                <input
-                  required
-                  type="text"
-                  placeholder="Departamentul"
-                  value={angajatData.departamentul}
-                  onChange={(e) => {
-                    handleInputChange({
-                      departamentul: e.target.value,
-                    });
-                  }}
-                />
-                <input
-                  required
-                  type="number"
-                  placeholder="Numar matricol intern"
-                  value={angajatData.numarMatricolIntern}
-                  onChange={(e) => {
-                    handleInputChange({
-                      numarMatricolIntern: e.target.value,
-                    });
-                  }}
-                />
-                <label className="w-auto" htmlFor="date">
-                  Data angajarii
-                </label>
-                <input
-                  required
-                  type="date"
-                  placeholder="Data angajarii"
-                  value={angajatData.dataAngajarii}
-                  onChange={(e) => {
-                    handleInputChange({
-                      dataAngajarii: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-              <div className="flex column">
-                <h3 className="w-auto">Conduce masina companiei?</h3>
-                <div className="flex">
-                  <div
-                    style={{ marginRight: "1rem" }}
-                    className="flex align-items-center"
-                  >
-                    <input
-                      style={{ width: "fit-content" }}
-                      type="radio"
-                      id="Da"
-                      name="conduceMasinCompaniei"
-                      value="1"
-                      checked={angajatData.conduceMasinaCompaniei}
-                      onChange={(e) => {
-                        handleInputChange({
-                          conduceMasinaCompaniei: e.target.value == "true",
-                        });
-                      }}
-                    />
-                    <label htmlFor="Da">Da</label>
-                    <br />
-                  </div>
-                  <div className="flex align-items-center">
+      {openModalAdaugaAngajat && (
+        <Dialog open={openModalAdaugaAngajat} onClose={handleClose}>
+          <DialogTitle>Adauga Angajati</DialogTitle>
+          <DialogContent>
+            <form
+              onSubmit={handleOnSubmit}
+              className="flex column align-items-center w-auto"
+            >
+              <div id="adauga-angajat-container" className="flex">
+                <div className="flex column">
+                  <div className="flex column">
                     <input
                       required
-                      style={{ width: "fit-content" }}
-                      type="radio"
-                      id="Nu"
-                      name="conduceMasinCompaniei"
-                      value="0"
-                      checked={!angajatData.conduceMasinaCompaniei}
+                      type="text"
+                      placeholder="Nume"
+                      value={angajatData.last_name}
                       onChange={(e) => {
-                        handleInputChange({
-                          conduceMasinaCompaniei: e.target.value == "true",
+                        handleDoubleInputChange({
+                          last_name: e.target.value,
                         });
                       }}
                     />
-                    <label htmlFor="Nu">Nu</label>
-                    <br />
+                    <input
+                      required
+                      type="text"
+                      placeholder="Prenume"
+                      value={angajatData.first_name}
+                      onChange={(e) => {
+                        handleDoubleInputChange({
+                          first_name: e.target.value,
+                        });
+                      }}
+                    />
+                    <input
+                      required
+                      type="text"
+                      placeholder="Legitimatie"
+                      value={angajatData.badge_number}
+                      onChange={(e) => {
+                        handleInputChange({
+                          badge_number: e.target.value,
+                        });
+                      }}
+                    />
+                    <input
+                      required
+                      type="text"
+                      placeholder="Grupa sanguina"
+                      value={angajatData.blood_type}
+                      onChange={(e) => {
+                        handleDoubleInputChange({
+                          blood_type: e.target.value,
+                        });
+                      }}
+                    />
+                    <input
+                      required
+                      type="text"
+                      placeholder="Domiciliul"
+                      value={angajatData.home_adress}
+                      onChange={(e) => {
+                        handleInputChange({
+                          home_adress: e.target.value,
+                        });
+                      }}
+                    />
+                  </div>
+                  <div className="flex column">
+                    <label className="w-auto" htmlFor="date">
+                      Data nasterii
+                    </label>
+                    <input
+                      required
+                      type="date"
+                      placeholder="Data nasterii"
+                      value={angajatData.date_of_birth}
+                      onChange={(e) => {
+                        handleDoubleInputChange({
+                          date_of_birth: e.target.value,
+                        });
+                      }}
+                    />
+                    <input
+                      required
+                      type="text"
+                      placeholder="Locul nasterii"
+                      value={angajatData.place_of_birth}
+                      onChange={(e) => {
+                        handleDoubleInputChange({
+                          place_of_birth: e.target.value,
+                        });
+                      }}
+                    />
+                    <input
+                      type="text"
+                      placeholder="Calificarea"
+                      value={angajatData.qualification}
+                      onChange={(e) => {
+                        handleInputChange({
+                          qualification: e.target.value,
+                        });
+                      }}
+                    />
+                    <input
+                      type="text"
+                      placeholder="Functia"
+                      value={angajatData.function}
+                      onChange={(e) => {
+                        handleInputChange({
+                          function: e.target.value,
+                        });
+                      }}
+                    />
+                    <input
+                      required
+                      type="mail"
+                      placeholder="Email"
+                      style={{ borderColor: emailWarning ? "red" : "" }}
+                      value={angajatData.email}
+                      onChange={(e) => {
+                        handleDoubleInputChange({
+                          email: e.target.value,
+                        });
+                      }}
+                    />
+                    <label>{emailWarningMessage}</label>
+                    <input
+                      required
+                      style={{ borderColor: passwordWarning ? "red" : "" }}
+                      type="tel"
+                      placeholder="telefon"
+                      value={angajatData.telephone}
+                      onChange={(e) => {
+                        handleDoubleInputChange({
+                          telephone: e.target.value,
+                        });
+                      }}
+                    />
+                    <label>{passwordWarningMessage}</label>
                   </div>
                 </div>
+                <div className="flex column">
+                  <div className="flex column">
+                    <input
+                      required
+                      type="text"
+                      placeholder="Departamentul"
+                      value={angajatData.department}
+                      onChange={(e) => {
+                        handleInputChange({
+                          department: e.target.value,
+                        });
+                      }}
+                    />
+                    <input
+                      required
+                      type="number"
+                      placeholder="Numar matricol intern"
+                      value={angajatData.internal_matriculation_number}
+                      onChange={(e) => {
+                        handleInputChange({
+                          internal_matriculation_number: e.target.value,
+                        });
+                      }}
+                    />
+                    <label className="w-auto" htmlFor="date">
+                      Data angajarii
+                    </label>
+                    <input
+                      required
+                      type="date"
+                      placeholder="Data angajarii"
+                      value={angajatData.date_of_employment}
+                      onChange={(e) => {
+                        handleInputChange({
+                          date_of_employment: e.target.value,
+                        });
+                      }}
+                    />
+                  </div>
+                  <div className="flex column">
+                    <h3 className="w-auto">Conduce masina companiei?</h3>
+                    <div className="flex">
+                      <div
+                        style={{ marginRight: "1rem" }}
+                        className="flex align-items-center"
+                      >
+                        <input
+                          style={{ width: "fit-content" }}
+                          type="radio"
+                          id="Da"
+                          name="conduceMasinCompaniei"
+                          value="1"
+                          checked={angajatData.drives_the_company_car}
+                          onChange={(e) => {
+                            handleInputChange({
+                              drives_the_company_car: e.target.value == "true",
+                            });
+                          }}
+                        />
+                        <label htmlFor="Da">Da</label>
+                        <br />
+                      </div>
+                      <div className="flex align-items-center">
+                        <input
+                          required
+                          style={{ width: "fit-content" }}
+                          type="radio"
+                          id="Nu"
+                          name="conduceMasinCompaniei"
+                          value="0"
+                          checked={!angajatData.drives_the_company_car}
+                          onChange={(e) => {
+                            handleInputChange({
+                              drives_the_company_car: e.target.value == "true",
+                            });
+                          }}
+                        />
+                        <label htmlFor="Nu">Nu</label>
+                        <br />
+                      </div>
+                    </div>
 
-                <select
-                  name="roles"
-                  id="role"
-                  onChange={handleRoleChange}
-                  value={userAngajatInfo.role}
-                >
-                  <option value="administrator">Administrator</option>
-                  <option value="angajator">Angajator</option>
-                  <option value="angajat">Angajat</option>
-                </select>
+                    <select
+                      name="roles"
+                      id="role"
+                      onChange={handleRoleChange}
+                      value={userAngajatInfo.role}
+                    >
+                      <option value="administrator">Administrator</option>
+                      <option value="angajator">Angajator</option>
+                      <option value="angajat">Angajat</option>
+                    </select>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="flex w-auto">
-            {adaugaAngajat ? (
-              <button
-                type="button"
-                className="button-style-2"
-                onClick={handleSetAdaugaAngajat(false)}
-              >
-                Anuleaza
-              </button>
-            ) : (
-              <button
-                type="button"
-                className="button-style-2"
-                onClick={handleSetEditAngajat(false)}
-              >
-                Anuleaza
-              </button>
-            )}
+              <div className="flex w-auto">
+                {adaugaAngajat ? (
+                  <button
+                    type="button"
+                    className="button-style-2"
+                    onClick={handleSetAdaugaAngajat(false)}
+                  >
+                    Anuleaza
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="button-style-2"
+                    onClick={handleClose}
+                  >
+                    Anuleaza
+                  </button>
+                )}
 
-            {adaugaAngajat ? (
-              <button type="submit" className="button-style-1">
-                Adauga angajat
-              </button>
-            ) : (
-              <button type="submit" className="button-style-1">
-                Editeaza angajat
-              </button>
-            )}
-          </div>
-        </form>
-      ) : (
-        <div>
-          <div
-            className="flex row-reverse space-between"
-            style={{ margin: "2rem" }}
-          >
+                {adaugaAngajat ? (
+                  <button type="submit" className="button-style-1">
+                    Adauga angajat
+                  </button>
+                ) : (
+                  <button type="submit" className="button-style-1">
+                    Editeaza angajat
+                  </button>
+                )}
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
+      )}
+      <div>
+        <div
+          className="flex row-reverse space-between"
+          style={{ margin: "2rem" }}
+        >
+          {editRight && (
             <button
               className="blue-button"
               style={{ margin: "1rem" }}
-              onClick={handleSetAdaugaAngajat(true)}
+              onClick={handleClickOpenNewAngajat}
             >
               Adauga Angajat
             </button>
+          )}
 
-            <Paper component="form" className="transparent">
-              <SearchIcon />
-              <InputBase
-                placeholder="Search…"
-                inputProps={{ "aria-label": "search" }}
-                value={searchTerm}
-                onChange={(e) => {
-                  handleSearchInputChange(e.target.value);
-                }}
-              />
-            </Paper>
-          </div>
-
-          <div>
-            {editRight ? (
-              <DataGrid
-                rows={filteredRowsTable}
-                columns={columnsEdit}
-                initialState={{
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
-                }}
-                checkboxSelection
-                rowSelectionModel={selectionModel}
-                onRowSelectionModelChange={handleSelectionModelChange}
-                slots={{
-                  toolbar: CustomToolbar,
-                }}
-                onCellClick={handleCellClick}
-              />
-            ) : (
-              <DataGrid
-                rows={filteredRowsTable}
-                columns={columns}
-                initialState={{
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
-                }}
-                checkboxSelection
-                rowSelectionModel={selectionModel}
-                onRowSelectionModelChange={handleSelectionModelChange}
-                slots={{
-                  toolbar: CustomToolbar,
-                }}
-                onCellClick={handleCellClick}
-              />
-            )}
-          </div>
+          <Paper component="form" className="transparent">
+            <SearchIcon />
+            <InputBase
+              placeholder="Search…"
+              inputProps={{ "aria-label": "search" }}
+              value={searchTerm}
+              onChange={(e) => {
+                handleSearchInputChange(e.target.value);
+              }}
+            />
+          </Paper>
         </div>
-      )}
+
+        <div>
+          {editRight ? (
+            <DataGrid
+              rows={filteredRowsTable}
+              columns={columnsEdit}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 },
+                },
+              }}
+              checkboxSelection
+              rowSelectionModel={selectionModel}
+              onRowSelectionModelChange={handleSelectionModelChange}
+              slots={{
+                toolbar: CustomToolbar,
+              }}
+              onCellClick={handleCellClick}
+            />
+          ) : (
+            <DataGrid
+              rows={filteredRowsTable}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 },
+                },
+              }}
+              checkboxSelection
+              rowSelectionModel={selectionModel}
+              onRowSelectionModelChange={handleSelectionModelChange}
+              slots={{
+                toolbar: CustomToolbar,
+              }}
+              onCellClick={handleCellClick}
+            />
+          )}
+        </div>
+      </div>
+
       {modalDeleteSingleRow ? (
         <ModalDelete
           handleDeleteSingleRow={handleDeleteSingleRow}
