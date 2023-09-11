@@ -21,17 +21,17 @@ type props = {
 
 type MembersAndLeaders = {
   id: number;
-  nume: string;
-  prenume: string;
+  last_name: string;
+  first_name: string;
   email: string;
-  telefon: string;
-  departamentul: string;
-  functie: string;
-  calificarea: string;
-  dataAngajarii: string;
+  telephone: string;
+  department: string;
+  function: string;
+  qualification: string;
+  date_of_employment: string;
   conduceMasinaCompaniei: boolean;
-  numarMatricolIntern: string;
-  legitimatie: string;
+  drives_the_company_car: string;
+  badge_number: string;
 };
 
 type TeamDetails = {
@@ -80,9 +80,9 @@ function EditTeam({ idTeamToEdit, handleEditTeam, handleSetTeamList }: props) {
         return;
       }
 
-      console.log(Object.values(members.angajati));
+      console.log(Object.values(members.employees));
 
-      return Object.values(members.angajati);
+      return Object.values(members.employees);
     } catch (error) {
       console.log(error);
     }
@@ -153,14 +153,14 @@ function EditTeam({ idTeamToEdit, handleEditTeam, handleSetTeamList }: props) {
       }
 
       const leadersNames = response.map((member: any) => {
-        return member.id + " - " + member.nume + " " + member.prenume;
+        return member.id + " - " + member.last_name + " " + member.first_name;
       });
 
       console.log(leadersNames);
 
       //filter the members that are already in the team
       const leadersInTeam = teamLeadersDetails.map((member) => {
-        return member.id + " - " + member.nume + " " + member.prenume;
+        return member.id + " - " + member.last_name + " " + member.first_name;
       });
 
       console.log(leadersInTeam);
@@ -185,14 +185,14 @@ function EditTeam({ idTeamToEdit, handleEditTeam, handleSetTeamList }: props) {
       }
 
       const angajatiNames = response.map((member: any) => {
-        return member.id + " - " + member.nume + " " + member.prenume;
+        return member.id + " - " + member.last_name + " " + member.first_name;
       });
 
       console.log(angajatiNames);
 
       //filter the members that are already in the team
       const membersInTeam = teamMembersDetails.map((member) => {
-        return member.id + " - " + member.nume + " " + member.prenume;
+        return member.id + " - " + member.last_name + " " + member.first_name;
       });
 
       console.log(membersInTeam);
@@ -281,11 +281,11 @@ function EditTeam({ idTeamToEdit, handleEditTeam, handleSetTeamList }: props) {
   }, [teamLeadersDetails]);
 
   const columnsMembers: GridColDef[] = [
-    { field: "nume", headerName: "Nume", width: 120 },
-    { field: "prenume", headerName: "Prenume", width: 120 },
+    { field: "last_name", headerName: "Nume", width: 120 },
+    { field: "first_name", headerName: "Prenume", width: 120 },
     { field: "email", headerName: "Email", width: 200 },
-    { field: "telefon", headerName: "Telefon", width: 150 },
-    { field: "functia", headerName: "Functia", width: 150 },
+    { field: "telephone", headerName: "Telefon", width: 150 },
+    { field: "function", headerName: "Functia", width: 150 },
     {
       field: "action",
       headerName: "Actiune",
@@ -304,11 +304,11 @@ function EditTeam({ idTeamToEdit, handleEditTeam, handleSetTeamList }: props) {
   ];
 
   const columnsLeaders: GridColDef[] = [
-    { field: "nume", headerName: "Nume", width: 120 },
-    { field: "prenume", headerName: "Prenume", width: 120 },
+    { field: "last_name", headerName: "Nume", width: 120 },
+    { field: "first_name", headerName: "Prenume", width: 120 },
     { field: "email", headerName: "Email", width: 200 },
-    { field: "telefon", headerName: "Telefon", width: 150 },
-    { field: "functia", headerName: "Functia", width: 150 },
+    { field: "telephone", headerName: "Telefon", width: 150 },
+    { field: "function", headerName: "Functia", width: 150 },
     {
       field: "action",
       headerName: "Actiune",

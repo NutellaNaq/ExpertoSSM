@@ -28,6 +28,7 @@ import {
 } from "../../requests/user.request";
 import { useEffect, useState } from "react";
 import ModalDelete from "./modals/ModalDelete";
+import renderCellStatusCar from "./renderCellStatusCar";
 
 type Angajat = {
   last_name: string;
@@ -316,6 +317,7 @@ function ProfilAngajati({ userPermissions }: props) {
       field: "drives_the_company_car",
       headerName: "Conduce masina companiei",
       width: 160,
+      renderCell: renderCellStatusCar,
     },
   ];
 
@@ -327,8 +329,11 @@ function ProfilAngajati({ userPermissions }: props) {
     }
 
     const angajatiArray: AngajatTable[] = Object.values(
-      getAngajatiInfo.Employees
+      getAngajatiInfo.employees
     );
+
+    console.log("angajatiArray");
+    console.log(angajatiArray);
 
     setRow(angajatiArray);
     setFilteredRowsTable(angajatiArray);

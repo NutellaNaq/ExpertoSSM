@@ -34,6 +34,7 @@ const handleListOfTeamsRequest = async () => {
     };
   });
 
+  console.log("transformedData");
   console.log(transformedData);
 
   return transformedData;
@@ -77,6 +78,7 @@ const ListTeams = ({ handleSetTeamList }: props) => {
     const fetchData = async () => {
       const data = await handleListOfTeamsRequest();
       setRowsToShow(data);
+      console.log("rowsToShow");
       console.log(rowsToShow);
     };
 

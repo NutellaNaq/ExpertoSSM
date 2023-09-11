@@ -4,21 +4,21 @@ import { ApiResponseType } from "../../utils/api.utils";
 
 type Angajat = {
   id: string;
-  nume: string;
-  prenume: string;
-  legitimatie: string;
-  grupaSanguina: string;
-  domiciliu: string;
-  dataNasterii: string;
-  loculNasterii: string;
-  calificarea: string;
-  functia: string;
+  last_name: string;
+  first_name: string;
+  badge_number: string;
+  blood_type: string;
+  home_adress: string;
+  date_of_birth: string;
+  place_of_birth: string;
+  qualification: string;
+  function: string;
   email: string;
-  telefon: string;
-  departamentul: string;
-  numarMatricolIntern: string;
-  dataAngajarii: string;
-  conduceMasinaCompaniei: boolean;
+  telephone: string;
+  department: string;
+  internal_matriculation_number: string;
+  date_of_employment: string;
+  drives_the_company_car: boolean;
 };
 
 function ProfilPersonal() {
@@ -65,16 +65,16 @@ function ProfilPersonal() {
           <div className="info-angajat-container">
             <h2 className="w-100">Informatii de baza</h2>
             <div className="grid-info">
-              <h5>Nume</h5> <h4>{angajat?.nume}</h4>
+              <h5>Nume</h5> <h4>{angajat?.last_name}</h4>
             </div>
             <div className="grid-info">
-              <h5>Prenume</h5> <h4>{angajat?.prenume}</h4>
+              <h5>Prenume</h5> <h4>{angajat?.first_name}</h4>
             </div>
             <div className="grid-info">
-              <h5>Functia</h5> <h4>{angajat?.functia}</h4>
+              <h5>Functia</h5> <h4>{angajat?.function}</h4>
             </div>
             <div className="grid-info">
-              <h5>Legitimatie</h5> <h4>{angajat?.legitimatie}</h4>
+              <h5>Legitimatie</h5> <h4>{angajat?.badge_number}</h4>
             </div>
           </div>
 
@@ -84,36 +84,36 @@ function ProfilPersonal() {
               <h5>Email</h5> <h4>{angajat?.email}</h4>
             </div>
             <div className="grid-info">
-              <h5>Telefon</h5> <h4>{angajat?.telefon}</h4>
+              <h5>Telefon</h5> <h4>{angajat?.telephone}</h4>
             </div>
           </div>
 
           <div className="info-angajat-container">
             <h2 className="w-100">Detalii Angajat</h2>
             <div className="grid-info">
-              <h5>Grupa Sanguina</h5> <h4>{angajat?.grupaSanguina}</h4>
+              <h5>Grupa Sanguina</h5> <h4>{angajat?.blood_type}</h4>
             </div>
             <div className="grid-info">
-              <h5>Domiciliul</h5> <h4>{angajat?.domiciliu}</h4>
+              <h5>Domiciliul</h5> <h4>{angajat?.home_adress}</h4>
             </div>
             <div className="grid-info">
-              <h5>Locul Nasterii</h5> <h4>{angajat?.loculNasterii}</h4>
+              <h5>Locul Nasterii</h5> <h4>{angajat?.place_of_birth}</h4>
             </div>
             <div className="grid-info">
-              <h5>Calificarea</h5> <h4>{angajat?.calificarea}</h4>
+              <h5>Calificarea</h5> <h4>{angajat?.qualification}</h4>
             </div>
             <div className="grid-info">
-              <h5>Data Nasterii</h5> <h4>{angajat?.dataNasterii}</h4>
+              <h5>Data Nasterii</h5> <h4>{angajat?.date_of_birth}</h4>
             </div>
             <div className="grid-info">
-              <h5>Departamentul</h5> <h4>{angajat?.departamentul}</h4>
+              <h5>Departamentul</h5> <h4>{angajat?.department}</h4>
             </div>
             <div className="grid-info">
               <h5>Numar Matricol Intern</h5>{" "}
-              <h4>{angajat?.numarMatricolIntern}</h4>
+              <h4>{angajat?.internal_matriculation_number}</h4>
             </div>
             <div className="grid-info">
-              <h5>Data Angajarii</h5> <h4>{angajat?.dataAngajarii}</h4>
+              <h5>Data Angajarii</h5> <h4>{angajat?.date_of_employment}</h4>
             </div>
           </div>
         </div>
