@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { recoverPasswordApiRequest } from "../../requests/user.request";
 
 function ForgotPasswordPage() {
   const [emailOrTelephone, setEmailOrTelephone] = useState("");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleRecoverApiRequest = async () => {
     const recoverData = await recoverPasswordApiRequest(emailOrTelephone);

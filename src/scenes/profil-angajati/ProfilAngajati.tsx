@@ -87,7 +87,7 @@ type UserAngajat = {
 
 function ProfilAngajati({ userPermissions }: props) {
   const [adaugaAngajat, setAdaugaAngajat] = useState(false);
-  const [editAngajat, setEditAngajat] = useState(false);
+  // const [editAngajat, setEditAngajat] = useState(false);
   const [editRight, setEditRight] = useState(false);
   const [angajatData, setAngajatData] = useState(INITIAL_VALUE);
   const [userAngajatInfo, setUserAngajatInfo] = useState({
@@ -197,9 +197,9 @@ function ProfilAngajati({ userPermissions }: props) {
     setAdaugaAngajat(value);
   };
 
-  const handleSetEditAngajat = (value: boolean) => () => {
-    setEditAngajat(value);
-  };
+  // const handleSetEditAngajat = (value: boolean) => () => {
+  //   setEditAngajat(value);
+  // };
 
   const [row, setRow] = useState<AngajatTable[]>([]);
 
@@ -255,7 +255,7 @@ function ProfilAngajati({ userPermissions }: props) {
   };
 
   const handleEdit = (model: GridRowModel) => {
-    setEditAngajat(true);
+    // setEditAngajat(true);
 
     setAngajatData(model.row as Angajat);
   };

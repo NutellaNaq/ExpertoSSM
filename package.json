@@ -16,6 +16,7 @@
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.12.3",
     "@mui/x-data-grid": "^6.3.1",
+    "@szenadam/scorm-api-wrapper": "^1.1.1",
     "axios": "^1.4.0",
     "formik": "^2.2.9",
     "react": "^18.2.0",

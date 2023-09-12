@@ -58,6 +58,7 @@ function DashboardPage() {
     // getUserRoles();
 
     // getUserPermissions();
+    navigate("/Courses");
   }, []);
 
   const handleSelectieMeniu = (selectie: string) => {
