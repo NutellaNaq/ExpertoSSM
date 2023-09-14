@@ -366,3 +366,17 @@ export const changePasswordGeneratedApiRequest = async (code: string) => {
     return ApiResponse.error(error);
   }
 };
+
+export const checkIfCodeCourseIsValidApiRequest = async (code: string) => {
+  try {
+    const result = await axiosInstance.post(
+      "/courses/checkIfCodeCourseIsValid",
+      {
+        code: code,
+      }
+    );
+    return ApiResponse.success(result.data);
+  } catch (error) {
+    return ApiResponse.error(error);
+  }
+};

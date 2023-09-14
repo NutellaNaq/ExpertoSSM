@@ -58,7 +58,7 @@ function DashboardPage() {
     // getUserRoles();
 
     // getUserPermissions();
-    navigate("/Courses");
+    navigate("/Courses/AFUIVF");
   }, []);
 
   const handleSelectieMeniu = (selectie: string) => {
