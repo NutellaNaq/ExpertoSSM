@@ -41,7 +41,7 @@ type AngajatiToAdd = {
 type EchipaToAdd = {
   name: string;
   parent_team: number;
-  angajati: AngajatiToAdd[];
+  employees: AngajatiToAdd[];
   leaders: AngajatiToAdd[];
 };
 
@@ -336,7 +336,7 @@ export const createTeamApiRequest = async (values: EchipaToAdd) => {
     const result = await axiosInstance.post("/team/store", {
       name: values.name,
       parent_team: values.parent_team,
-      angajati: values.angajati,
+      employees: values.employees,
       leaders: values.leaders,
     });
     return ApiResponse.success(result.data);

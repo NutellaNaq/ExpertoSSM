@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import ScormApiWrapper from "@szenadam/scorm-api-wrapper";
 import { useParams } from "react-router-dom";
 import { checkIfCodeCourseIsValidApiRequest } from "../../requests/user.request";
+import { scormInit } from "./scorm_lms.js";
 
-const ScormIntegrationComponent: React.FC = () => {
+const ScormComponent: React.FC = () => {
   const [validCode, setValidCode] = useState(false);
   const [completionStatus, setCompletionStatus] = useState("");
   const [urlScorm, setUrlScorm] = useState("");
@@ -36,41 +36,42 @@ const ScormIntegrationComponent: React.FC = () => {
       return;
     }
 
-    // Initialize the SCORM API wrapper here after ensuring that code and URL are valid
-    const scorm = new ScormApiWrapper(true);
-    scorm.scormVersion = "2004";
-    scorm.handleCompletionStatus = true;
+    setCompletionStatus("incomplete");
 
-    if (scorm.initialize()) {
-      console.log("SCORM API initialized successfully.");
-    } else {
-      console.error("Failed to initialize SCORM API.");
-    }
+    setScore(0);
   }, [code, urlScorm]);
+
+  const handleIframeLoad = () => {
+    // Call scormInit when the iframe has loaded
+    scormInit({
+      window,
+      prefixNumber: 2,
+      callback: ({ progress }) => {
+        console.log("progress", progress);
+      },
+    });
+  };
 
   return (
     <>
-      <div>
-        {validCode ? (
-          <>
-            Completion Status: {completionStatus}, Score: {score}
-          </>
-        ) : (
-          "Invalid Code"
-        )}
-      </div>
-      <div style={{ width: "100%", height: "100vh", overflow: "hidden" }}>
-        <iframe
-          src="https://georgetestero.talentlms.com/securitatea-și-sanatatea-in-munca-instructaj-introductiv-general-scorm[...].zip/scormcontent/index.html"
-          title="SCORM Content"
-          style={{ width: "100%", height: "100%", overflow: "hidden" }}
-        ></iframe>
-        <div
-          style={{ width: "100%", height: "100vh", overflow: "hidden" }}
-        ></div>
-      </div>
+      <h1>
+        {validCode} , {score} , {completionStatus}
+      </h1>
+      <iframe
+        src="https://georgenacu.dev.ascensys.ro/ExpertoSSM/dashboard/zip/scormdriver/indexAPI.html"
+        name="course"
+        frameBorder="0"
+        style={{
+          overflow: "hidden",
+          overflowX: "hidden",
+          overflowY: "hidden",
+          height: "100vh",
+          width: "100%",
+        }}
+        onLoad={handleIframeLoad}
+      ></iframe>
     </>
   );
 };
 
-export default ScormIntegrationComponent;
+export default ScormComponent;

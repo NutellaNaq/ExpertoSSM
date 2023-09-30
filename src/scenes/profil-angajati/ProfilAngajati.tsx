@@ -46,6 +46,13 @@ type Angajat = {
   internal_matriculation_number: string;
   date_of_employment: string;
   drives_the_company_car: boolean;
+  role?: string;
+  completed_tasks: {
+    medicina_muncii: boolean;
+    iigm: boolean;
+    ilm: boolean;
+    ip: boolean;
+  };
 };
 
 type AngajatTable = Angajat & {
@@ -68,6 +75,12 @@ const INITIAL_VALUE = {
   internal_matriculation_number: "",
   date_of_employment: "",
   drives_the_company_car: false,
+  completed_tasks: {
+    medicina_muncii: false,
+    iigm: false,
+    ilm: false,
+    ip: false,
+  },
 };
 
 type props = {
@@ -99,7 +112,13 @@ function ProfilAngajati({ userPermissions }: props) {
     place_of_birth: "",
     blood_type: "",
     home_address: "",
-    role: "",
+    role: "worker",
+    completed_tasks: {
+      medicina_muncii: false,
+      iigm: false,
+      ilm: false,
+      ip: false,
+    },
   });
   const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
   const [rowToDelete, setRowToDelete] = useState<GridRowModel[]>([]);
@@ -121,6 +140,11 @@ function ProfilAngajati({ userPermissions }: props) {
     setOpenModalAdaugaAngajat(true);
   };
 
+  const handleCLickOpenEdit = () => {
+    setOpenModalAdaugaAngajat(true);
+    setAdaugaAngajat(false);
+  };
+
   const handleClickOpenNewAngajat = () => {
     setAdaugaAngajat(true);
     handleClickOpen();
@@ -128,6 +152,7 @@ function ProfilAngajati({ userPermissions }: props) {
   };
 
   const handleClose = () => {
+    handleSetAdaugaAngajat(false);
     setOpenModalAdaugaAngajat(false);
   };
 
@@ -173,6 +198,24 @@ function ProfilAngajati({ userPermissions }: props) {
 
   const handleInputChange = (value: Partial<Angajat>) => {
     setAngajatData({ ...angajatData, ...value });
+  };
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = event.target;
+    setAngajatData((prevState) => ({
+      ...prevState,
+      completed_tasks: {
+        ...prevState.completed_tasks,
+        [name]: checked,
+      },
+    }));
+  };
+
+  const handleRoleChangeAngajat = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const selectedRole = event.target.value;
+    handleInputChange({ role: selectedRole });
   };
 
   const handleDoubleInputChange = (value: Partial<Angajat>) => {
@@ -256,8 +299,10 @@ function ProfilAngajati({ userPermissions }: props) {
 
   const handleEdit = (model: GridRowModel) => {
     // setEditAngajat(true);
-
-    setAngajatData(model.row as Angajat);
+    console.log(model.row);
+    if (!adaugaAngajat) {
+      setAngajatData(model.row);
+    }
   };
 
   const columnsEdit: GridColDef[] = [
@@ -281,8 +326,8 @@ function ProfilAngajati({ userPermissions }: props) {
             <EditIcon
               onClick={(event) => {
                 event.stopPropagation();
-                handleClickOpen();
                 handleEdit(params);
+                handleCLickOpenEdit();
               }}
             />
           </IconButton>
@@ -464,11 +509,18 @@ function ProfilAngajati({ userPermissions }: props) {
           responseAngajat.internal_matriculation_number,
         date_of_employment: responseAngajat.date_of_employment,
         drives_the_company_car: responseAngajat.drives_the_company_car,
+        completed_tasks: {
+          medicina_muncii: responseAngajat.completed_tasks.medicina_muncii,
+          iigm: responseAngajat.completed_tasks.iigm,
+          ilm: responseAngajat.completed_tasks.ilm,
+          ip: responseAngajat.completed_tasks.ip,
+        },
       };
 
       setRow([...row, newRow]);
 
       setAdaugaAngajat(false);
+      handleClose();
     } else {
       const responseEditAngajat = await updateAngajatAPIRequest(angajatData);
       if (responseEditAngajat.error) {
@@ -497,6 +549,13 @@ function ProfilAngajati({ userPermissions }: props) {
               responseEditAngajat.internal_matriculation_number,
             date_of_employment: responseEditAngajat.date_of_employment,
             drives_the_company_car: responseEditAngajat.drives_the_company_car,
+            completed_tasks: {
+              medicina_muncii:
+                responseEditAngajat.completed_tasks.medicina_muncii,
+              iigm: responseEditAngajat.completed_tasks.iigm,
+              ilm: responseEditAngajat.completed_tasks.ilm,
+              ip: responseEditAngajat.completed_tasks.ip,
+            },
           };
         }
         return item;
@@ -693,21 +752,19 @@ function ProfilAngajati({ userPermissions }: props) {
                   </div>
                   <div className="flex column">
                     <h3 className="w-auto">Conduce masina companiei?</h3>
-                    <div className="flex">
-                      <div
-                        style={{ marginRight: "1rem" }}
-                        className="flex align-items-center"
-                      >
+                    <div className="flex justify-content-between">
+                      <div className="flex align-items-center">
                         <input
+                          required
                           style={{ width: "fit-content" }}
                           type="radio"
                           id="Da"
                           name="conduceMasinCompaniei"
-                          value="1"
+                          value="true"
                           checked={angajatData.drives_the_company_car}
                           onChange={(e) => {
                             handleInputChange({
-                              drives_the_company_car: e.target.value == "true",
+                              drives_the_company_car: e.target.value === "true",
                             });
                           }}
                         />
@@ -721,11 +778,12 @@ function ProfilAngajati({ userPermissions }: props) {
                           type="radio"
                           id="Nu"
                           name="conduceMasinCompaniei"
-                          value="0"
+                          value="false"
                           checked={!angajatData.drives_the_company_car}
                           onChange={(e) => {
                             handleInputChange({
-                              drives_the_company_car: e.target.value == "true",
+                              drives_the_company_car:
+                                e.target.value === "false",
                             });
                           }}
                         />
@@ -734,16 +792,78 @@ function ProfilAngajati({ userPermissions }: props) {
                       </div>
                     </div>
 
-                    <select
-                      name="roles"
-                      id="role"
-                      onChange={handleRoleChange}
-                      value={userAngajatInfo.role}
-                    >
-                      <option value="administrator">Administrator</option>
-                      <option value="angajator">Angajator</option>
-                      <option value="angajat">Angajat</option>
-                    </select>
+                    {adaugaAngajat ? (
+                      <select
+                        name="roles"
+                        id="role"
+                        onChange={handleRoleChange}
+                        value={userAngajatInfo.role}
+                      >
+                        <option value="worker">Angajat</option>
+                        <option value="team-leader">Team Leader</option>
+                        <option value="admin">Administrator</option>
+                      </select>
+                    ) : (
+                      <select
+                        name="roles"
+                        id="role"
+                        onChange={handleRoleChangeAngajat}
+                        value={userAngajatInfo.role}
+                      >
+                        <option value="worker">Angajat</option>
+                        <option value="team-leader">Team Leader</option>
+                        <option value="admin">Administrator</option>
+                      </select>
+                    )}
+                    {adaugaAngajat && (
+                      <div>
+                        <label htmlFor="my-checkboxes">
+                          <h3>Angajatul are deja cursurile completate : </h3>
+                        </label>
+                        <div id="my-checkboxes">
+                          <div>
+                            <input
+                              type="checkbox"
+                              id="option1"
+                              name="medicina_muncii"
+                              value="Medicina Muncii"
+                              onChange={handleCheckboxChange}
+                            />
+                            <label htmlFor="option1">Medicina Muncii</label>
+                          </div>
+                          <div>
+                            <input
+                              type="checkbox"
+                              id="optionIIGM"
+                              name="iigm"
+                              value="IIGM"
+                              onChange={handleCheckboxChange}
+                            />
+                            <label htmlFor="option2">IIGM</label>
+                          </div>
+                          <div>
+                            <input
+                              type="checkbox"
+                              id="optionILM"
+                              name="ilm"
+                              value="ILM"
+                              onChange={handleCheckboxChange}
+                            />
+                            <label htmlFor="option3">ILM</label>
+                          </div>
+                          <div>
+                            <input
+                              type="checkbox"
+                              id="optionIP"
+                              name="ip"
+                              value="IP"
+                              onChange={handleCheckboxChange}
+                            />
+                            <label htmlFor="option4">IP</label>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -752,7 +872,7 @@ function ProfilAngajati({ userPermissions }: props) {
                   <button
                     type="button"
                     className="button-style-2"
-                    onClick={handleSetAdaugaAngajat(false)}
+                    onClick={handleClose}
                   >
                     Anuleaza
                   </button>

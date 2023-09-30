@@ -22,14 +22,14 @@ type AngajatiToAdd = {
 type EchipaToAdd = {
   name: string;
   parent_team: number;
-  angajati: AngajatiToAdd[];
+  employees: AngajatiToAdd[];
   leaders: AngajatiToAdd[];
 };
 
 const INITIAL_VALUE: EchipaToAdd = {
   name: "",
   parent_team: 0,
-  angajati: [],
+  employees: [],
   leaders: [],
 };
 
@@ -74,7 +74,7 @@ const Organigramme = ({ handleSetTeamList }: props) => {
     try {
       const angajatiResponse = await getAllMembersAndTeamLeadersApiRequest();
 
-      const responseAngajati = Object.values(angajatiResponse.angajati);
+      const responseAngajati = Object.values(angajatiResponse.employees);
       const responseLeaders = Object.values(angajatiResponse.teamLeaders);
 
       console.log(responseAngajati);
@@ -223,11 +223,11 @@ const Organigramme = ({ handleSetTeamList }: props) => {
             multiple
             id="tags-standard"
             options={angajatiNume}
-            value={dateEchipaAdaugata.angajati.map((angajat) => angajat.name)}
+            value={dateEchipaAdaugata.employees.map((angajat) => angajat.name)}
             onChange={(_event, newValue) => {
               setDateEchipaAdaugata({
                 ...dateEchipaAdaugata,
-                angajati: angajati.filter((angajat) =>
+                employees: angajati.filter((angajat) =>
                   newValue.includes(angajat.name)
                 ),
               });

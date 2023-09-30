@@ -110,7 +110,12 @@ const SideMenu: React.FC<SideMenuProps> = ({
             <Menu>
               <h4 className="menuTitle">Modul HR</h4>
               <MenuItem icon={<CerereAbsenteIcon />}>Cerere absență</MenuItem>
-              <MenuItem icon={<ConcediiIcon />}>Concedii</MenuItem>
+              <MenuItem
+                onClick={() => handleSelectieMeniu("concedii")}
+                icon={<ConcediiIcon />}
+              >
+                Concedii
+              </MenuItem>
               <MenuItem icon={<FluturasSalariuIcon />}>
                 Fluturaș salariu
               </MenuItem>

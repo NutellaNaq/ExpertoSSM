@@ -996,3 +996,33 @@ li.css-1vs3jbz div {
   padding: 0.5rem;
   margin: 0.5rem;
 }
+
+/* CSS for requested events */
+.requested-event {
+  background-color: rgb(
+    23,
+    74,
+    255
+  ) !important; /* Red background for requested events */
+}
+
+/* CSS for approved events */
+.approved-event {
+  background-color: rgb(
+    0,
+    215,
+    163
+  ) !important; /* Green background for approved events */
+}
+
+button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium.MuiAutocomplete-popupIndicator.css-uge3vf {
+  color: white !important;
+}
+
+.MuiInputBase-root.MuiInput-root.MuiInput-underline.MuiInputBase-colorPrimary.MuiInputBase-fullWidth.MuiInputBase-formControl.MuiInputBase-adornedEnd.MuiAutocomplete-inputRoot.css-12rx5qu {
+  border-bottom: 1px solid white !important;
+}
+
+input#tags-standard {
+  color: black !important;
+}

@@ -10,6 +10,7 @@ import EchipaMea from "./echipa-mea/EchipaMea";
 import TopMenu from "./global/TopMenu";
 import ProfilAngajatPage from "./profil-angajati/ProfilAngajatiPage";
 import CompaniaMea from "./compania-mea/CompaniaMea";
+import Concedii from "./modul_hr/concedii/Concedii";
 
 function DashboardPage() {
   const navigate = useNavigate();
@@ -58,7 +59,7 @@ function DashboardPage() {
     // getUserRoles();
 
     // getUserPermissions();
-    navigate("/Courses/AFUIVF");
+    // navigate("/Courses/AFUIVF");
   }, []);
 
   const handleSelectieMeniu = (selectie: string) => {
@@ -82,6 +83,7 @@ function DashboardPage() {
         {selectieMeniu === "dashboard" && <Dashboard />}
         {selectieMeniu === "echipaMea" && <EchipaMea />}
         {selectieMeniu === "companiaMea" && <CompaniaMea />}
+        {selectieMeniu === "concedii" && <Concedii />}
       </div>
     </>
   );
