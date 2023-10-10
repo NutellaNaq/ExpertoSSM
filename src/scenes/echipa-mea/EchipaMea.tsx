@@ -43,11 +43,17 @@ type AngajatFisaSSM = {
   IP: string;
 };
 
+type FisaSSM = {
+  id: number;
+  name: string;
+  status: string;
+};
+
 type AngajatiStatus = {
   id: number;
   nume: string;
   prenume: string;
-  fiseSSMStatus: string[];
+  fiseSSMStatus: FisaSSM[];
 };
 
 function EchipaMea() {
@@ -76,49 +82,11 @@ function EchipaMea() {
         });
       };
 
-      console.log(filterRows(rows));
-
       setFilteredRowsTable(filterRows(rows));
     } else {
       setFilteredRowsTable(rows);
     }
   }, [searchTerm]);
-  //   const getAngajatiInfo = await getAllAngajatiAPIRequest();
-
-  //   if (getAngajatiInfo.error) {
-  //     return [];
-  //   }
-
-  //   console.log(getAngajatiInfo);
-  //   const angajatiArray: AngajatTable[] = Object.values(
-  //     getAngajatiInfo.angajati
-  //   );
-
-  //   return angajatiArray;
-  // };
-
-  // const fetchAngajati = async () => {
-  //   const angajatiArray = await getAngajati();
-  //   const angajatNames = angajatiArray.map((angajat: AngajatTable) => {
-  //     return {
-  //       id: angajat.id,
-  //       nume: angajat.nume,
-  //       prenume: angajat.prenume,
-  //     };
-  //   });
-
-  //   return Object.values(angajatNames);
-  // };
-
-  // const fetchFisaSSM = async (id: number) => {
-  //   const fisaSSM = await getFisaSSMByIdAPIRequest(id);
-
-  //   if (fisaSSM.error) {
-  //     return [];
-  //   }
-
-  //   return Object.values(fisaSSM.status);
-  // };
 
   const setTheColumns = () => {
     const columns: GridColDef[] = [
@@ -151,23 +119,21 @@ function EchipaMea() {
       },
     ];
 
-    setColumns(columns);
+    return columns;
   };
 
   const getFiseArray = async () => {
     try {
       const angajatiDataStatus = await getAllAngajatiStatusApiRequest();
 
-      const angajatiDataStatusValue: AngajatiStatus[] =
-        Object.values(angajatiDataStatus);
+      const angajatiDataStatusValue: AngajatiStatus[] = angajatiDataStatus.data;
 
       const rowTableStatusData = angajatiDataStatusValue.map(
         (element: AngajatiStatus) => {
-          const medicinaMuncii = element.fiseSSMStatus[0];
-          const IIGM = element.fiseSSMStatus[1];
-          const ILM = element.fiseSSMStatus[2];
-          const IP = element.fiseSSMStatus[3];
-
+          const medicinaMuncii = element?.fiseSSMStatus[0]?.status;
+          const IIGM = element?.fiseSSMStatus[1]?.status;
+          const ILM = element?.fiseSSMStatus[2]?.status;
+          const IP = element?.fiseSSMStatus[3]?.status;
           return {
             id: element.id,
             nume: element.nume,
@@ -186,7 +152,6 @@ function EchipaMea() {
       setLoading(false);
     } catch (error) {
       // Handle error
-      console.error("Error fetching data:", error);
       setLoading(false);
     }
   };
@@ -313,13 +278,10 @@ function EchipaMea() {
             ) : (
               <DataGrid
                 rows={filteredRowsTable}
-                columns={columns}
-                initialState={{
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
-                }}
-                slots={{ toolbar: GridToolbar }}
+                columns={setTheColumns()}
+                // pageSize={10}
+                // rowsPerPageOptions={[10]}
+                // disableSelectionOnClick
               />
             )}
           </div>

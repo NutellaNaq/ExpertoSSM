@@ -572,7 +572,11 @@ function ProfilAngajati({ userPermissions }: props) {
     <div id="profilAngajati">
       {openModalAdaugaAngajat && (
         <Dialog open={openModalAdaugaAngajat} onClose={handleClose}>
-          <DialogTitle>Adauga Angajati</DialogTitle>
+          {openModalAdaugaAngajat ? (
+            <DialogTitle>Editeaza Angajati</DialogTitle>
+          ) : (
+            <DialogTitle>Adauga Angajati</DialogTitle>
+          )}
           <DialogContent>
             <form
               onSubmit={handleOnSubmit}
@@ -815,7 +819,55 @@ function ProfilAngajati({ userPermissions }: props) {
                         <option value="admin">Administrator</option>
                       </select>
                     )}
-                    {adaugaAngajat && (
+                    {adaugaAngajat ? (
+                      <div>
+                        <label htmlFor="my-checkboxes">
+                          <h3>Angajatul are deja cursurile completate : </h3>
+                        </label>
+                        <div id="my-checkboxes">
+                          <div>
+                            <input
+                              type="checkbox"
+                              id="option1"
+                              name="medicina_muncii"
+                              value="Medicina Muncii"
+                              onChange={handleCheckboxChange}
+                            />
+                            <label htmlFor="option1">Medicina Muncii</label>
+                          </div>
+                          <div>
+                            <input
+                              type="checkbox"
+                              id="optionIIGM"
+                              name="iigm"
+                              value="IIGM"
+                              onChange={handleCheckboxChange}
+                            />
+                            <label htmlFor="option2">IIGM</label>
+                          </div>
+                          <div>
+                            <input
+                              type="checkbox"
+                              id="optionILM"
+                              name="ilm"
+                              value="ILM"
+                              onChange={handleCheckboxChange}
+                            />
+                            <label htmlFor="option3">ILM</label>
+                          </div>
+                          <div>
+                            <input
+                              type="checkbox"
+                              id="optionIP"
+                              name="ip"
+                              value="IP"
+                              onChange={handleCheckboxChange}
+                            />
+                            <label htmlFor="option4">IP</label>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
                       <div>
                         <label htmlFor="my-checkboxes">
                           <h3>Angajatul are deja cursurile completate : </h3>

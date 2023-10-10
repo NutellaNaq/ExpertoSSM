@@ -102,7 +102,12 @@ const SideMenu: React.FC<SideMenuProps> = ({
               </MenuItem>
 
               <MenuItem icon={<CalendarIcon />}>Calendar Instruiri</MenuItem>
-              <MenuItem icon={<CursurileMeleIcon />}>Cursurile mele</MenuItem>
+              <MenuItem
+                icon={<CursurileMeleIcon />}
+                onClick={() => handleSelectieMeniu("cursurileMele")}
+              >
+                Cursurile mele
+              </MenuItem>
               <MenuItem icon={<EchipamenteIcon />}>Echipamente</MenuItem>
               <MenuItem icon={<DocumenteIcon />}>Echipamente</MenuItem>
             </Menu>

@@ -5,6 +5,11 @@ type LoginRequestType = {
   password: string;
 };
 
+type PDFData = {
+  course_id: string;
+  employee_id: string;
+};
+
 type AngajatData = {
   last_name: string;
   first_name: string;
@@ -28,10 +33,6 @@ type UserAngajat = {
   telephone?: string;
   role: string;
 };
-
-// type FisaSSMAngajat = {
-//   angajati: string[];
-// };
 
 type AngajatiToAdd = {
   id: number;
@@ -154,9 +155,34 @@ export const updateAngajatAPIRequest = async (AngajatData: AngajatData) => {
   }
 };
 
+export const getPDFFileAPIRequest = async (PDFData: PDFData) => {
+  try {
+    const result = await axiosInstance.post(
+      "/courses/generatePDFCourse",
+      {
+        course_id: PDFData.course_id,
+        employee_id: PDFData.employee_id.toString(),
+      },
+      { responseType: "blob" }
+    );
+    return ApiResponse.success(result);
+  } catch (error) {
+    return ApiResponse.error(error);
+  }
+};
+
 export const getFisaSSMByIdAPIRequest = async (id: number) => {
   try {
     const result = await axiosInstance.get(`/fiseSSM/show/${id}`);
+    return ApiResponse.success(result.data);
+  } catch (error) {
+    return ApiResponse.error(error);
+  }
+};
+
+export const getSelfEmployeeStatusAPIRequest = async () => {
+  try {
+    const result = await axiosInstance.get("/angajati/getSelfEmployeeStatus");
     return ApiResponse.success(result.data);
   } catch (error) {
     return ApiResponse.error(error);
@@ -375,6 +401,32 @@ export const checkIfCodeCourseIsValidApiRequest = async (code: string) => {
         code: code,
       }
     );
+    return ApiResponse.success(result.data);
+  } catch (error) {
+    return ApiResponse.error(error);
+  }
+};
+
+export const adminCourseCompletedApiRequest = async (
+  employeeId: string,
+  courseId: string
+) => {
+  try {
+    const result = await axiosInstance.post("/courses/adminCourseComplete", {
+      course_id: courseId,
+      employee_id: employeeId.toString(),
+    });
+    return ApiResponse.success(result.data);
+  } catch (error) {
+    return ApiResponse.error(error);
+  }
+};
+
+export const courseLinksApiRequest = async (ids: string[]) => {
+  try {
+    const result = await axiosInstance.post("/courses/getCourseLinks", {
+      ids: ids,
+    });
     return ApiResponse.success(result.data);
   } catch (error) {
     return ApiResponse.error(error);

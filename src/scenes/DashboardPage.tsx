@@ -11,6 +11,7 @@ import TopMenu from "./global/TopMenu";
 import ProfilAngajatPage from "./profil-angajati/ProfilAngajatiPage";
 import CompaniaMea from "./compania-mea/CompaniaMea";
 import Concedii from "./modul_hr/concedii/Concedii";
+import CursurileMelePage from "./my_courses/CursurileMelePage";
 
 function DashboardPage() {
   const navigate = useNavigate();
@@ -84,6 +85,9 @@ function DashboardPage() {
         {selectieMeniu === "echipaMea" && <EchipaMea />}
         {selectieMeniu === "companiaMea" && <CompaniaMea />}
         {selectieMeniu === "concedii" && <Concedii />}
+        {selectieMeniu === "cursurileMele" && (
+          <CursurileMelePage userPermissions={userPermissions} />
+        )}
       </div>
     </>
   );

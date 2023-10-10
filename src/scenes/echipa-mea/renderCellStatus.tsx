@@ -10,8 +10,6 @@ const renderCellStatus = (params: GridRenderCellParams | string) => {
   } else if (typeof params == "object") {
     value = params.value;
   }
-  console.log(typeof params);
-  console.log("value: ", value);
   return (
     <>
       {value === "completed" && <CheckCircleIcon color="success" />}
