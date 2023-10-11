@@ -223,6 +223,7 @@ function EditTeam({ idTeamToEdit, handleEditTeam, handleSetTeamList }: props) {
       setTeamLeadersDetails(response.data.leaders);
       setRowsToShowAngajati(response.data.members);
       setRowsToShowLeaders(response.data.leaders);
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     }

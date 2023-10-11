@@ -299,10 +299,7 @@ function ProfilAngajati({ userPermissions }: props) {
 
   const handleEdit = (model: GridRowModel) => {
     // setEditAngajat(true);
-    console.log(model.row);
-    if (!adaugaAngajat) {
-      setAngajatData(model.row);
-    }
+    setAngajatData(model.row);
   };
 
   const columnsEdit: GridColDef[] = [
@@ -385,8 +382,14 @@ function ProfilAngajati({ userPermissions }: props) {
   };
 
   useEffect(() => {
-    setAngajatData(INITIAL_VALUE);
+    if (adaugaAngajat) {
+      setAngajatData(INITIAL_VALUE);
+    }
   }, [adaugaAngajat]);
+
+  useEffect(() => {
+    console.log(angajatData);
+  }, [angajatData]);
 
   useEffect(() => {
     if (userPermissions.includes("edit-profil-angajati")) {
@@ -572,10 +575,10 @@ function ProfilAngajati({ userPermissions }: props) {
     <div id="profilAngajati">
       {openModalAdaugaAngajat && (
         <Dialog open={openModalAdaugaAngajat} onClose={handleClose}>
-          {openModalAdaugaAngajat ? (
-            <DialogTitle>Editeaza Angajati</DialogTitle>
+          {adaugaAngajat ? (
+            <DialogTitle>Adauga Angajat</DialogTitle>
           ) : (
-            <DialogTitle>Adauga Angajati</DialogTitle>
+            <DialogTitle>Editeaza Angajat</DialogTitle>
           )}
           <DialogContent>
             <form
@@ -765,7 +768,7 @@ function ProfilAngajati({ userPermissions }: props) {
                           id="Da"
                           name="conduceMasinCompaniei"
                           value="true"
-                          checked={angajatData.drives_the_company_car}
+                          checked={angajatData.drives_the_company_car == true}
                           onChange={(e) => {
                             handleInputChange({
                               drives_the_company_car: e.target.value === "true",
@@ -783,11 +786,10 @@ function ProfilAngajati({ userPermissions }: props) {
                           id="Nu"
                           name="conduceMasinCompaniei"
                           value="false"
-                          checked={!angajatData.drives_the_company_car}
+                          checked={angajatData.drives_the_company_car == false}
                           onChange={(e) => {
                             handleInputChange({
-                              drives_the_company_car:
-                                e.target.value === "false",
+                              drives_the_company_car: e.target.value === "true",
                             });
                           }}
                         />
@@ -819,55 +821,7 @@ function ProfilAngajati({ userPermissions }: props) {
                         <option value="admin">Administrator</option>
                       </select>
                     )}
-                    {adaugaAngajat ? (
-                      <div>
-                        <label htmlFor="my-checkboxes">
-                          <h3>Angajatul are deja cursurile completate : </h3>
-                        </label>
-                        <div id="my-checkboxes">
-                          <div>
-                            <input
-                              type="checkbox"
-                              id="option1"
-                              name="medicina_muncii"
-                              value="Medicina Muncii"
-                              onChange={handleCheckboxChange}
-                            />
-                            <label htmlFor="option1">Medicina Muncii</label>
-                          </div>
-                          <div>
-                            <input
-                              type="checkbox"
-                              id="optionIIGM"
-                              name="iigm"
-                              value="IIGM"
-                              onChange={handleCheckboxChange}
-                            />
-                            <label htmlFor="option2">IIGM</label>
-                          </div>
-                          <div>
-                            <input
-                              type="checkbox"
-                              id="optionILM"
-                              name="ilm"
-                              value="ILM"
-                              onChange={handleCheckboxChange}
-                            />
-                            <label htmlFor="option3">ILM</label>
-                          </div>
-                          <div>
-                            <input
-                              type="checkbox"
-                              id="optionIP"
-                              name="ip"
-                              value="IP"
-                              onChange={handleCheckboxChange}
-                            />
-                            <label htmlFor="option4">IP</label>
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
+                    {adaugaAngajat && (
                       <div>
                         <label htmlFor="my-checkboxes">
                           <h3>Angajatul are deja cursurile completate : </h3>

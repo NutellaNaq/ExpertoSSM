@@ -25,10 +25,21 @@ type Props = {
   teamName: string;
   idTeamOfSeeMore: number;
   handleSeeMore: (value: boolean) => void;
+  handleSetSectiuneEchipaMea: (value: string) => void;
 };
 
-const SeeMore = ({ teamName, idTeamOfSeeMore, handleSeeMore }: Props) => {
+const SeeMore = ({
+  teamName,
+  idTeamOfSeeMore,
+  handleSeeMore,
+  handleSetSectiuneEchipaMea,
+}: Props) => {
   const [rowsOfMembers, setRowsOfMembers] = useState<StatusAngajatiTable[]>([]);
+
+  const handleTheSection = (value: string) => {
+    handleSeeMore(false);
+    handleSetSectiuneEchipaMea(value);
+  };
 
   const handleRows = async (row: any) => {
     console.log(row);
@@ -39,8 +50,8 @@ const SeeMore = ({ teamName, idTeamOfSeeMore, handleSeeMore }: Props) => {
 
       return {
         id: element.id,
-        nume: element.nume,
-        prenume: element.prenume,
+        nume: element.last_name,
+        prenume: element.first_name,
         medicinaMuncii: fiseSSMStatus[0],
         IIGM: fiseSSMStatus[1],
         ILM: fiseSSMStatus[2],
@@ -117,6 +128,14 @@ const SeeMore = ({ teamName, idTeamOfSeeMore, handleSeeMore }: Props) => {
       <div className="flex" style={{ margin: "0 2rem" }}>
         <button className="back-button" onClick={() => handleSeeMore(false)}>
           <KeyboardBackspaceIcon />
+        </button>
+        <button
+          className="button-style-1"
+          style={{ margin: "0 1rem" }}
+          type="button"
+          onClick={() => handleTheSection("angajati")}
+        >
+          Angajati
         </button>
       </div>
       <DataGrid

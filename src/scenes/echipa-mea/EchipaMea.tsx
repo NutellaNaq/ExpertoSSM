@@ -2,13 +2,11 @@ import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import renderCellTrue from "./renderCellStatus";
 import { getAllAngajatiStatusApiRequest } from "../../requests/user.request";
-import { FormControlLabel, InputBase, Paper } from "@mui/material";
+import { InputBase, Paper } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import TeamTable, {
   createRows,
 } from "../profil-angajati/adminPage/adminAngajati";
-import { styled } from "@mui/material/styles";
-import Switch from "@mui/material/Switch";
 import TitlePage from "../../components/Title-Page";
 
 type AngajatTable = Angajat & {
@@ -66,6 +64,10 @@ function EchipaMea() {
   );
   const [loading, setLoading] = useState(true);
   const [sectiuneEchipaMea, setSectiuneEchipaMea] = useState("angajati");
+
+  const handleSetSectiuneEchipaMea = (value: string) => {
+    setSectiuneEchipaMea(value);
+  };
 
   const handleSearchInputChange = (value: string) => {
     setSearchTerm(value);
@@ -159,6 +161,7 @@ function EchipaMea() {
   const [teamData, setTeamData] = useState([] as any[]);
 
   useEffect(() => {
+    setColumns([]);
     setTheColumns();
     getFiseArray();
     const fetchData = async () => {
@@ -170,61 +173,6 @@ function EchipaMea() {
 
   const empty: AngajatTable[] = [];
 
-  const MaterialUISwitch = styled(Switch)(({ theme }) => ({
-    width: 62,
-    height: 34,
-    padding: 7,
-    "& .MuiSwitch-switchBase": {
-      margin: 1,
-      padding: 0,
-      transform: "translateX(6px)",
-      "&.Mui-checked": {
-        color: "#fff",
-        transform: "translateX(22px)",
-        "& .MuiSwitch-thumb:before": {
-          backgroundImage: `url('data:image/svg+xml;utf8,<svg fill="${encodeURIComponent(
-            "#fff"
-          )}" width="25px" height="25px" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"><path d="M481 699l-135 71q-10 6-22 5t-21.5-8-14-18-2.5-22l26-150q2-10-1-20t-11-17L191 434q-8-8-11-19.5t.5-22.5 12.5-18.5 21-9.5l151-22q10-1 18-7t13-15l67-137q5-11 15-17t22-6 22 6 15 17l67 137q5 9 13 15t18 7l151 22q12 2 21 9.5t12.5 18.5.5 22.5-11 19.5L700 540q-8 7-11 17t-1 20l26 150q2 11-2.5 22t-14 18-21.5 8-22-5l-135-71q-9-5-19-5t-19 5z"/></svg>')`,
-        },
-        "& + .MuiSwitch-track": {
-          opacity: 1,
-          backgroundColor:
-            theme.palette.mode === "dark" ? "#8796A5" : "#aab4be",
-        },
-      },
-    },
-    "& .MuiSwitch-thumb": {
-      backgroundColor: theme.palette.mode === "dark" ? "#003892" : "#001e3c",
-      width: 32,
-      height: 32,
-      "&:before": {
-        content: "''",
-        position: "absolute",
-        width: "100%",
-        height: "100%",
-        left: 0,
-        top: 0,
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
-
-        backgroundImage: `url('data:image/svg+xml;utf8,<svg fill="${encodeURIComponent(
-          "#fff"
-        )}"  height="20" width="20" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="M16 15.503A5.041 5.041 0 1 0 16 5.42a5.041 5.041 0 0 0 0 10.083zm0 2.215c-6.703 0-11 3.699-11 5.5v3.363h22v-3.363c0-2.178-4.068-5.5-11-5.5z"/></svg>')`,
-      },
-    },
-    "& .MuiSwitch-track": {
-      opacity: 1,
-      backgroundColor: theme.palette.mode === "dark" ? "#8796A5" : "#aab4be",
-      borderRadius: 20 / 2,
-    },
-  }));
-
-  const handleSwitchChange = () => {
-    setSectiuneEchipaMea((prevSectiune) =>
-      prevSectiune === "angajati" ? "echipe" : "angajati"
-    );
-  };
-
   const [seeMore, setSeeMore] = useState(false);
 
   const handleSeeMore = (value: boolean) => {
@@ -235,33 +183,29 @@ function EchipaMea() {
     <>
       <div id="echipaMea">
         <TitlePage mainTitle={"ECHIPA MEA"} />
-        {!seeMore && (
-          <div style={{ margin: "2 rem" }}>
-            <FormControlLabel
-              control={
-                <MaterialUISwitch
-                  sx={{ m: 1 }}
-                  checked={sectiuneEchipaMea === "echipe"}
-                />
-              }
-              label={sectiuneEchipaMea === "angajati" ? "Angajati" : "Echipe"}
-              onChange={handleSwitchChange}
-            />
-          </div>
-        )}
         {sectiuneEchipaMea === "angajati" ? (
           <div id="listaAngajati">
             <div style={{ margin: "2rem" }}>
               <Paper component="form" className="transparent">
-                <SearchIcon />
-                <InputBase
-                  placeholder="Search…"
-                  inputProps={{ "aria-label": "search" }}
-                  value={searchTerm}
-                  onChange={(e) => {
-                    handleSearchInputChange(e.target.value);
-                  }}
-                />
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <SearchIcon />
+                  <InputBase
+                    placeholder="Search…"
+                    inputProps={{ "aria-label": "search" }}
+                    value={searchTerm}
+                    onChange={(e) => {
+                      handleSearchInputChange(e.target.value);
+                    }}
+                  />
+                  <button
+                    className="button-style-1"
+                    style={{ margin: "0 1rem" }}
+                    type="button"
+                    onClick={() => setSectiuneEchipaMea("Echipe")}
+                  >
+                    Echipe
+                  </button>
+                </div>
               </Paper>
             </div>
             {loading ? (
@@ -291,6 +235,7 @@ function EchipaMea() {
               teamData={teamData}
               handleSeeMore={handleSeeMore}
               seeMore={seeMore}
+              handleSetSectiuneEchipaMea={handleSetSectiuneEchipaMea}
             />
           </div>
         )}

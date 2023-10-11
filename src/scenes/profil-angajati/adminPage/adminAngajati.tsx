@@ -203,15 +203,17 @@ export const createRows: CreateRows = () => {
           let numberOfMembers = 0;
           let numberOfCompletedDocuments = 0;
           let numberOfUncompletedDocuments = 0;
-          const arrayOfAngajati = team?.angajati;
+          const arrayOfAngajati = team?.Employees;
+
+          console.log(arrayOfAngajati);
 
           if (arrayOfAngajati) {
             for (const angajatKey in arrayOfAngajati) {
               if (Object.hasOwnProperty.call(arrayOfAngajati, angajatKey)) {
                 numberOfMembers++;
                 const angajat = arrayOfAngajati[angajatKey];
-                const angajatName = angajat?.nume;
-                const angajatPrenume = angajat?.prenume;
+                const angajatName = angajat?.last_name;
+                const angajatPrenume = angajat?.first_name;
                 const angajatFiseSSMStatus = angajat?.fiseSSMStatus;
 
                 for (const angajatFiseSSMStatusKey in angajatFiseSSMStatus) {
@@ -244,6 +246,8 @@ export const createRows: CreateRows = () => {
                   ],
                 };
 
+                console.log(row);
+
                 rows.push(row);
               }
             }
@@ -267,12 +271,14 @@ type CollapsibleTableProps = {
   teamData: any[]; // Replace 'any[]' with the appropriate type of your team data
   seeMore: boolean;
   handleSeeMore: (value: boolean) => void;
+  handleSetSectiuneEchipaMea: (value: string) => void;
 };
 
 export default function TeamTable({
   teamData,
   seeMore,
   handleSeeMore,
+  handleSetSectiuneEchipaMea,
 }: CollapsibleTableProps) {
   const [rowsForShowing, setRowsForShowing] = useState([] as RowValues[]);
 
@@ -284,6 +290,10 @@ export default function TeamTable({
   const [searchTerm, setSearchTerm] = useState("");
   const [idTeamOfSeeMore, setIdTeamOfSeeMore] = useState(0);
   const [teamName, setTeamName] = useState("22");
+
+  const handleTheSection = (value: string) => {
+    handleSetSectiuneEchipaMea(value);
+  };
 
   const handleTeamData = (ids: number, teamName: string) => {
     handleSeeMore(true);
@@ -329,21 +339,32 @@ export default function TeamTable({
             teamName={teamName}
             idTeamOfSeeMore={idTeamOfSeeMore}
             handleSeeMore={handleSeeMore}
+            handleSetSectiuneEchipaMea={handleSetSectiuneEchipaMea}
           />
         </>
       ) : (
         <div>
           <div style={{ margin: "2rem" }}>
             <Paper component="form" className="transparent">
-              <SearchIcon />
-              <InputBase
-                placeholder="Search…"
-                inputProps={{ "aria-label": "search" }}
-                value={searchTerm}
-                onChange={(e) => {
-                  handleSearchInputChange(e.target.value);
-                }}
-              />
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <SearchIcon />
+                <InputBase
+                  placeholder="Search…"
+                  inputProps={{ "aria-label": "search" }}
+                  value={searchTerm}
+                  onChange={(e) => {
+                    handleSearchInputChange(e.target.value);
+                  }}
+                />
+                <button
+                  className="button-style-1"
+                  style={{ margin: "0 1rem" }}
+                  type="button"
+                  onClick={() => handleTheSection("angajati")}
+                >
+                  Angajati
+                </button>
+              </div>
             </Paper>
           </div>
           <TableContainer component={Paper}>

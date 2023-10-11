@@ -82,14 +82,15 @@ const Organigramme = ({ handleSetTeamList }: props) => {
       const leadersData: AngajatiToAdd[] = responseLeaders.map(
         (leader: any) => ({
           id: leader.id,
-          name: leader.id + " - " + leader.nume + " " + leader.prenume,
+          name: leader.id + " - " + leader.last_name + " " + leader.first_name,
         })
       );
 
       const angajatiData: AngajatiToAdd[] = responseAngajati.map(
         (angajat: any) => ({
           id: angajat.id,
-          name: angajat.id + " - " + angajat.nume + " " + angajat.prenume,
+          name:
+            angajat.id + " - " + angajat.last_name + " " + angajat.first_name,
         })
       );
 

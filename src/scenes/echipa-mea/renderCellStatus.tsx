@@ -10,11 +10,16 @@ const renderCellStatus = (params: GridRenderCellParams | string) => {
   } else if (typeof params == "object") {
     value = params.value;
   }
+
+  const status = value?.status;
+
   return (
     <>
-      {value === "completed" && <CheckCircleIcon color="success" />}
-      {value === "in progress" && <AccessTimeIcon color="info" />}
-      {value === "needs completion" && <CancelIcon color="warning" />}
+      {status == "completed" && <CheckCircleIcon color="success" />}
+      {status == "in progress" && <AccessTimeIcon color="info" />}
+      {status == "needs completion" && <CancelIcon color="warning" />}
+
+      {status == undefined && <CancelIcon color="warning" />}
     </>
   );
 };
