@@ -197,8 +197,19 @@ function EchipaMea() {
                       handleSearchInputChange(e.target.value);
                     }}
                   />
+
                   <button
-                    className="button-style-1"
+                    className={`${
+                      sectiuneEchipaMea ? "button-style-2" : "button-style-1"
+                    }`}
+                    style={{ margin: "0 1rem" }}
+                    type="button"
+                    onClick={() => setSectiuneEchipaMea("angajati")}
+                  >
+                    Angajati
+                  </button>
+                  <button
+                    className={"button-style-1"}
                     style={{ margin: "0 1rem" }}
                     type="button"
                     onClick={() => setSectiuneEchipaMea("Echipe")}
@@ -223,9 +234,11 @@ function EchipaMea() {
               <DataGrid
                 rows={filteredRowsTable}
                 columns={setTheColumns()}
-                // pageSize={10}
-                // rowsPerPageOptions={[10]}
-                // disableSelectionOnClick
+                initialState={{
+                  pagination: {
+                    paginationModel: { page: 0, pageSize: 5 },
+                  },
+                }}
               />
             )}
           </div>

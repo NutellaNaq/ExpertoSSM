@@ -133,9 +133,9 @@ const SeeMore = ({
           className="button-style-1"
           style={{ margin: "0 1rem" }}
           type="button"
-          onClick={() => handleTheSection("angajati")}
+          onClick={() => handleTheSection("Echipe")}
         >
-          Angajati
+          Echipe
         </button>
       </div>
       <DataGrid

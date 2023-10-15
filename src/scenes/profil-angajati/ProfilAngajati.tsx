@@ -571,6 +571,26 @@ function ProfilAngajati({ userPermissions }: props) {
     }
   };
 
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result;
+      console.log(result);
+    };
+    if (
+      file.type === "text/xml" ||
+      file.type ===
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    ) {
+      reader.readAsText(file);
+    } else {
+      console.log("Invalid file type");
+    }
+  };
+
   return (
     <div id="profilAngajati">
       {openModalAdaugaAngajat && (
@@ -912,13 +932,25 @@ function ProfilAngajati({ userPermissions }: props) {
           style={{ margin: "2rem" }}
         >
           {editRight && (
-            <button
-              className="blue-button"
-              style={{ margin: "1rem" }}
-              onClick={handleClickOpenNewAngajat}
-            >
-              Adauga Angajat
-            </button>
+            <div>
+              <button className="green-button" style={{ margin: "1rem" }}>
+                <input
+                  type="file"
+                  onChange={handleFileUpload}
+                  accept=".xml,.xlsx"
+                  style={{ display: "none" }}
+                />
+                Adauga XML Angajati
+              </button>
+
+              <button
+                className="blue-button"
+                style={{ margin: "1rem" }}
+                onClick={handleClickOpenNewAngajat}
+              >
+                Adauga Angajat
+              </button>
+            </div>
           )}
 
           <Paper component="form" className="transparent">

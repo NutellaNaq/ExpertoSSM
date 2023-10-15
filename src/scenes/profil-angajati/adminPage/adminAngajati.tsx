@@ -357,12 +357,20 @@ export default function TeamTable({
                   }}
                 />
                 <button
-                  className="button-style-1"
+                  className={"button-style-1"}
                   style={{ margin: "0 1rem" }}
                   type="button"
                   onClick={() => handleTheSection("angajati")}
                 >
                   Angajati
+                </button>
+                <button
+                  className={"button-style-2"}
+                  style={{ margin: "0 1rem" }}
+                  type="button"
+                  onClick={() => handleTheSection("Echipe")}
+                >
+                  Echipe
                 </button>
               </div>
             </Paper>

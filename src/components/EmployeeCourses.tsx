@@ -22,7 +22,7 @@ function EmployeeCourses({
   getAngajatiStatus,
 }: {
   infoEmplooye: EmployeeCoursesProps;
-  getAngajatiStatus: () => void;
+  getAngajatiStatus?: () => void;
 }) {
   const [dropdown, setDropdown] = useState(false);
   const [infoEmplooyesStatus, setInfoEmplooyesStatus] = useState(true);
@@ -82,7 +82,9 @@ function EmployeeCourses({
     async (event: React.MouseEvent<HTMLButtonElement>) => {
       event.preventDefault();
       await adminCourseCompletedApiRequest(id, statusId);
-      getAngajatiStatus();
+      if (getAngajatiStatus) {
+        getAngajatiStatus();
+      }
     };
 
   return (
