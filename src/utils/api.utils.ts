@@ -2,8 +2,7 @@ import axios from "axios";
 
 // create axios instance
 export const axiosInstance = axios.create({
-  baseURL:
-    "https://georgenacu.dev.ascensys.ro/ExpertoSSMBackend/orbit-laravel/public/api",
+  baseURL: "https://www.experto.ro/ExpertoBackend/orbit-laravel/public/api",
   timeout: 10000,
 
   headers: {
