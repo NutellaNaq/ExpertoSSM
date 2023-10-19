@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import "../../DashboardStyle.css";
 import {
+  getCurrentUserAPIRequest,
   loginAPIRequest,
   loginWithTokenAPIRequest,
 } from "../../requests/user.request";
@@ -13,6 +14,16 @@ function LoginPage() {
   const navigate = useNavigate();
 
   const { tokenEmail } = useParams();
+
+  const token = localStorage.getItem("token");
+
+  const getCurrentUser = async () => {
+    const getCurrentUserInfo = await getCurrentUserAPIRequest();
+
+    if (getCurrentUserInfo.error != true) {
+      navigate("/");
+    }
+  };
 
   const handleLoginWithToken = async () => {
     if (!tokenEmail) {
@@ -35,6 +46,12 @@ function LoginPage() {
 
     console.log("Login with token success");
   };
+
+  useEffect(() => {
+    axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    getCurrentUser();
+  }, []);
 
   useEffect(() => {
     handleLoginWithToken();
@@ -61,8 +78,9 @@ function LoginPage() {
       return;
     }
 
-    console.log("Login success");
-    navigate("/");
+    if (responseLogin.token) {
+      navigate("/");
+    }
   };
 
   return (
